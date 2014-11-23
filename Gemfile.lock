@@ -218,5 +218,6 @@ DEPENDENCIES
   rb-fsevent
   rspec-collection_matchers
   rspec-rails
+  thor
   timecop
   user_plane!
