@@ -5,8 +5,8 @@ module User
     validates :sign_up_invite, presence: true
 
 
-    def invite_token= token
-      @sign_up_invite = Invite.find_by_token(token) or nil
+    def invite_code= code
+      @sign_up_invite = SignUpInvites::Invite.find_by_code(code) or nil
     end
 
   end

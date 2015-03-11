@@ -8,8 +8,9 @@ module User
 
     validates :name, uniqueness: true, presence: true
 
-    has_one    :invites_stack,    class_name: 'User::SignUpInvites::Stack', autosave: True
-    belongs_to :invite,           class_name: 'User::SignUpInvites::Invite'
+    has_one    :invites_stack, class_name: 'User::SignUpInvites::Stack',
+                               autosave: true
+    has_one    :invite,        class_name: 'User::SignUpInvites::Invite'
 
     before_create :build_invites_stack
 

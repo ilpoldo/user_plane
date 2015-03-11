@@ -4,6 +4,7 @@ class CreateUserSignUpInvitesInvites < ActiveRecord::Migration
       t.references :stack
       t.string :code
       t.string :recipient
+      t.references :account
 
       t.timestamps
     end

@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
     t.integer  "stack_id"
     t.string   "code"
     t.string   "recipient"
+    t.integer  "account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

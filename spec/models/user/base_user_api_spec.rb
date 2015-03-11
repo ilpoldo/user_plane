@@ -28,16 +28,17 @@ describe 'Base User API' do
       recipient       = Faker::Internet.user_name
       recipient_email = "#{recipient}@example.com"
       send_sign_up_invite  = User::SendSignUpInvite.new(sender: a_user,
-                                                      recipient: recipient_email)
+                                                       recipient: recipient_email)
       send_sign_up_invite.perform
 
       invite = send_sign_up_invite.invite
+
       p = 'some secret'
-      sign_up_with_invite = User::SignUpForSignUp.new(user_name: recipient,
-                                                    invite_token: invite.token,
-                                                    email: recipient_email,
-                                                    password: p,
-                                                    password_confirmation: p)
+      sign_up_with_invite = User::SignUpWithInvite.new(user_name: recipient,
+                                                       invite_code: invite.code,
+                                                       email: recipient_email,
+                                                       password: p,
+                                                       password_confirmation: p)
 
       expect { sign_up_with_invite.perform! }.to_not raise_error
 
