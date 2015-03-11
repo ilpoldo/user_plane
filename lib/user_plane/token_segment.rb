@@ -5,7 +5,7 @@ module TokenSegment
 
   module ClassMethods
     
-    def has_token(attribute, options={}, &block)
+    def has_token(attribute, options={})
       
       validate attribute, uniqueness: true
 
@@ -15,7 +15,11 @@ module TokenSegment
       end
 
       before_validation do
-        make_token attribute, block.try(:call)
+        if block_given?
+          make_token attribute, yield
+        else
+          make_token attribute
+        end
       end
     end
 
@@ -26,7 +30,7 @@ private
   def make_token(attribute, token_string = nil)
     string_to_hash = token_string || "#{self.class.name}-#{Time.now}-#{rand}-#{self.id}"
     new_attributes = {attribute => Digest::SHA1.hexdigest(string_to_hash)}
-    self.assign_attributes new_attributes, without_protection: true
+    self.assign_attributes new_attributes
   end
 
 end

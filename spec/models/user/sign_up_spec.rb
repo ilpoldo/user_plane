@@ -7,17 +7,16 @@ describe User::SignUp do
     it 'happens for the command receiver' do
       p = 'somesecret'
       sign_up_1 = User::SignUp.new(user_name: 'test', email: 'test@example.com', password: p, password_confirmation: p)
-      sign_up_1.should be_valid
+      expect(sign_up_1).to be_valid
       sign_up_1.perform!
 
       sign_up_2 = User::SignUp.new(user_name: 'test', email: 'test@example.com', password: p, password_confirmation: p)
       
-      sign_up_2.should_not be_valid
+      expect(sign_up_2).not_to be_valid
 
-      # WHY: this isn't working - sign_up_2.errors.should have(1).error_on(:email)
-      sign_up_2.errors[:email].should have(1).item
-      sign_up_2.errors[:user_name].should have(1).item
-      sign_up_2.errors[:email_identity].should have(:no).item
+      expect(sign_up_2.errors[:email].size).to eq(1)
+      expect(sign_up_2.errors[:user_name].size).to eq(1)
+      expect(sign_up_2.errors[:email_identity].size).to eq(0)
     end
 
 

@@ -32,9 +32,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'poltergeist'
 
   
-  s.add_development_dependency 'jasminerice'
+  s.add_development_dependency 'brainsome_jasminerice'
 
   s.add_development_dependency 'fabrication-rails'
+  s.add_development_dependency 'faker'
   s.add_development_dependency 'timecop'
 
   s.add_development_dependency 'rb-fsevent'
@@ -42,6 +43,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'thor' # Undeclared dependency of guard
   s.add_development_dependency 'guard-jasmine'
 
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'pry-doc'
   s.add_development_dependency 'pry-rescue'
   s.add_development_dependency 'pry-stack_explorer'
 

@@ -1,4 +1,4 @@
-source "http://gems.pow"
+source "http://gems.dev"
 source "https://rubygems.org"
 
 # Declare your gem's dependencies in user_plane.gemspec.

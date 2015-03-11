@@ -3,6 +3,11 @@ require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
+
+require 'fabrication'
+require 'timecop'
+require 'pry'
+
 Capybara.javascript_driver = :poltergeist
 
 Rails.backtrace_cleaner.remove_silencers!

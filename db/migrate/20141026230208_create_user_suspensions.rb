@@ -3,11 +3,11 @@ class CreateUserSuspensions < ActiveRecord::Migration
     create_table :user_suspensions do |t|
       t.string :message
       t.references :issuer
-      t.references :foo
+      t.references :account
 
       t.timestamps
     end
     add_index :user_suspensions, :issuer_id
-    add_index :user_suspensions, :foo_id
+    add_index :user_suspensions, :account_id
   end
 end

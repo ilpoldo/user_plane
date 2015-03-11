@@ -1,4 +1,4 @@
-class CreateUserIdentitiesEmailUpdateKeys < ActiveRecord::Migration
+class CreateUserIdentitiesEmailVerifications < ActiveRecord::Migration
   def change
     create_table :user_identities_email_verifications do |t|
       t.string :token
