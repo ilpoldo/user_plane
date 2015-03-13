@@ -4,7 +4,7 @@ module User
 
   class Identities::Email < Identity
 
-    has_one         :email_verification
+    has_many        :email_verifications
     belongs_to      :account,  class_name: 'User::Account'
     has_one         :id_token, as: :identity
 
@@ -19,9 +19,24 @@ module User
                         uniqueness: {message: 'is taken'},
                         format:     {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
     
-    
+
     def self.verified
-      joins(:email_verification, Arel::Nodes::OuterJoin) | EmailUpdateKey.verification
+      where.not(address: nil)
+    end
+
+    def address=(new_address)
+      # Stores the new unverified address in as and email_verification for this identity
+      email_verifications.build(type: 'AddressVerification', recipient: new_address)
+    end
+
+    def verfy_new_address!
+      verification = self.email_verifications.unspent.address_verification.last
+      address = verification.recipient
+
+      ActiveRecord::Base.transaction do
+        verification.spend!
+        save!
+      end
     end
 
   end

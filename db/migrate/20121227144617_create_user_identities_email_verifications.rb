@@ -3,7 +3,9 @@ class CreateUserIdentitiesEmailVerifications < ActiveRecord::Migration
     create_table :user_identities_email_verifications do |t|
       t.string :token
       t.string :type
+      t.string :recipient
       t.references :email
+      t.datetime   :spent_at
 
       t.timestamps
     end

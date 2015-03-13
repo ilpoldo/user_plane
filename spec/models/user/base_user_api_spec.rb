@@ -48,7 +48,6 @@ describe 'Base User API' do
     it 'can be invited and register with twitter'
 
     it 'can be created logging in with twitter' do
-      p = 'some secret'
       # User fills up the signup form with his user name and clicks to register with twitter
       sign_up = User::Identities::OAuth.identity(user_name: 'foo', 
                                                  provider: 'twitter')

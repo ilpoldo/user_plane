@@ -1,7 +1,7 @@
 class CreateUserIdentitiesIdTokens < ActiveRecord::Migration
   def change
     create_table :user_identities_id_tokens do |t|
-      t.string      :key
+      t.string     :key
       t.references :identity, :polymorphic => true
 
       t.timestamps

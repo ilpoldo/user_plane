@@ -28,7 +28,9 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   create_table "user_identities_email_verifications", force: true do |t|
     t.string   "token"
     t.string   "type"
+    t.string   "recipient"
     t.integer  "email_id"
+    t.datetime "spent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
