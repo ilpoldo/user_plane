@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe User::SignUp do
   
-  describe 'validation' do
+  describe 'validation errors' do
   
-    it 'happens for the command receiver' do
+    it 'are mapped to the command object' do
       p = 'somesecret'
       sign_up_1 = User::SignUp.new(user_name: 'test', email: 'test@example.com', password: p, password_confirmation: p)
-      expect(sign_up_1).to be_valid
       sign_up_1.perform!
 
       sign_up_2 = User::SignUp.new(user_name: 'test', email: 'test@example.com', password: p, password_confirmation: p)

@@ -20,13 +20,19 @@ module User
     validates :email_identity,   receiver: {map_attributes: {address: :email}}
     validates :account,          receiver: {map_attributes: {name:    :user_name}}
 
+
+    # Considerations for the email validation procedure
+    # * should be easy to change email for admin / app
+    # * creating an email verification should trigger an email message
+    # * email verification should be optional, based on App configuration
+    # * email uniqueness should be checked when the verification is written
+
     before_validation do
       self.account          =  Account.new(name: user_name)
 
-      self.email_identity   =  Identities::Email.new(address: email,
-                                                     password: password,
-                                                     password_confirmation: password_confirmation)
-      self.account.email = self.email_identity
+      self.email_identity   =  account.build_email(address: email,
+                                                   password: password,
+                                                   password_confirmation: password_confirmation)
     end
 
     action do

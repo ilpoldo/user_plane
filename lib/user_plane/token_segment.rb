@@ -5,21 +5,29 @@ module TokenSegment
 
   module ClassMethods
     
-    def has_token(attribute, options={})
-      
+    def has_token(attribute, options={}, &block)
+      # Generates a random token on a given attirubte at creation time.
+      # optionally it can create it for every update of the record.
+
       validate attribute, uniqueness: true
 
-      if options[:expires_in]
+      if life_span = options[:expires_in]
         scope :stale, -> {unscoped.where(:created_at.gt => life_span.ago)}
         default_scope -> {where(:created_at.gt => life_span.ago)}
       end
 
-      before_validation do
+      define_method :"regenerate_#{attribute}" do
         if block_given?
-          make_token attribute, yield
+          make_token attribute, instance_eval(&block)
         else
           make_token attribute
         end
+      end  
+
+      if regenerate_on = options[:regenerate_on]
+        before_validation :"regenerate_#{attribute}", on: regenerate_on
+      else
+        before_validation :"regenerate_#{attribute}" 
       end
     end
 

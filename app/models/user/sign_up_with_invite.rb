@@ -6,7 +6,7 @@ module User
 
 
     def invite_code= code
-      @sign_up_invite = SignUpInvites::Invite.find_by_code(code) or nil
+      self.sign_up_invite = SignUpInvites::Invite.find_by_code(code) or nil
     end
 
   end

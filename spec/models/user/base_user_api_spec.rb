@@ -17,7 +17,8 @@ describe 'Base User API' do
                                  email: 'foo@example.com',
                                  password: p,
                                  password_confirmation: p)
-      sign_up.should be_valid
+
+      expect(sign_up).to be_valid
       sign_up.perform
 
       expect { User::Account.find(sign_up.account.id) }.to_not  raise_error
@@ -51,7 +52,7 @@ describe 'Base User API' do
       # User fills up the signup form with his user name and clicks to register with twitter
       sign_up = User::Identities::OAuth.identity(user_name: 'foo', 
                                                  provider: 'twitter')
-      sign_up.should be_valid
+      expect(sign_up).to be_valid
       sign_up.perform
       # If valid (invite, unique name etc), a user with a pending identity is created
       # The pending identity identificator is stored in the user's cookies
@@ -72,25 +73,28 @@ describe 'Base User API' do
       sign_up.account
     end
 
-    it 'can update his email address' do
+    it 'can set and verify a new email address' do
       old_identity = a_user.email
-      old_email = a_user.email.address
-      new_email = Faker::Internet.email
+      old_address = a_user.email.address
+      new_address = Faker::Internet.safe_email
       
       login_token = a_user.email.serialize
       
-      a_user.email.address = new_email
-      a_user.save
+      # TODO: wrap this into a command object to update account details
+      a_user.email.new_address = new_address
+      # a_user.save
+      verification_token = a_user.email.email_verifications.address_verification.last.token
 
       login = User::Identity.deserialize!(login_token)
       expect(login).to eql(old_identity)
 
-      expect(a_user.email.address).to eql(old_email)
+      expect(a_user.email.address).to eql(old_address)
 
-      a_user.email.verify!
-      login = User::Identity.deserialize!(login_token)
-      expect(login).to be_nil
-      expect(a_user.email.address).to eql(new_email)
+      # Verifying a new address updates the login token
+      a_user.email.verify_new_address! verification_token
+      expect { User::Identity.deserialize!(login_token) }.to raise_error
+
+      expect(a_user.email.address).to eql(new_address)
 
     end
     it 'can cange his password providing the old one'
