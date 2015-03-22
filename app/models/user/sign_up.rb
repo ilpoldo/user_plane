@@ -4,22 +4,24 @@ module User
     include ActiveModel::Validations::Callbacks
 
     attribute :user_name
+    
     attribute :email
     attribute :password
     attribute :password_confirmation
+
+    attribute :omniauth_data
     
     attribute :account
     attribute :email_identity
-
-    # Validate input
-    validates :password,  :password_confirmation, presence: true
-    validates :password,  confirmation: true,
-                          length: {within: 8..56}
+    attribute :oauth_identity
 
     # Validate command receivers
-    validates :email_identity,   receiver: {map_attributes: {address: :email}}
-    validates :account,          receiver: {map_attributes: {name:    :user_name}}
+    validates :email_identity, receiver: {map_attributes: {address:  :email,
+                                                           password: :password,
+                                                           password_confirmation: :password_confirmation}}
+    validates :account,        receiver: {map_attributes: {name:    :user_name}}
 
+    validates :oauth_identity, receiver: {map_attributes: {uid: :account}}
 
     # Considerations for the email validation procedure
     # * should be easy to change email for admin / app
@@ -30,9 +32,14 @@ module User
     before_validation do
       self.account          =  Account.new(name: user_name)
 
-      self.email_identity   =  account.build_email(address: email,
-                                                   password: password,
-                                                   password_confirmation: password_confirmation)
+      if email
+        self.email_identity   =  account.build_email(address: email,
+                                                     password: password,
+                                                     password_confirmation: password_confirmation)
+      end
+      if omniauth_data
+        self.oauth_identity = account.oauth_identities.build_from_omniauth(omniauth_data)
+      end
     end
 
     action do

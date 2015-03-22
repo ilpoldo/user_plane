@@ -10,5 +10,6 @@ class CreateUserIdentitiesEmailVerifications < ActiveRecord::Migration
       t.timestamps
     end
     add_index :user_identities_email_verifications, :email_id
+    add_index :user_identities_email_verifications, :token
   end
 end

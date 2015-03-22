@@ -11,6 +11,19 @@ describe 'Base User API' do
       sign_up.account
     end
 
+    let :invite_recipient do
+      Faker::Internet.user_name
+    end
+
+    let :a_sign_up_invite do
+      recipient_email = "#{invite_recipient}@example.com"
+      send_sign_up_invite  = User::SendSignUpInvite.new(sender: a_user,
+                                                        recipient: recipient_email)
+      send_sign_up_invite.perform
+
+      invite = send_sign_up_invite.invite
+    end
+
     it 'can be created from a registration form' do
       p = 'some secret'
       sign_up = User::SignUp.new(user_name: 'foo', 
@@ -25,19 +38,10 @@ describe 'Base User API' do
     end
 
     it 'can be invited by another user' do 
-
-      recipient       = Faker::Internet.user_name
-      recipient_email = "#{recipient}@example.com"
-      send_sign_up_invite  = User::SendSignUpInvite.new(sender: a_user,
-                                                       recipient: recipient_email)
-      send_sign_up_invite.perform
-
-      invite = send_sign_up_invite.invite
-
       p = 'some secret'
-      sign_up_with_invite = User::SignUpWithInvite.new(user_name: recipient,
-                                                       invite_code: invite.code,
-                                                       email: recipient_email,
+      sign_up_with_invite = User::SignUpWithInvite.new(user_name: invite_recipient,
+                                                       invite_code: a_sign_up_invite.code,
+                                                       email: a_sign_up_invite.recipient,
                                                        password: p,
                                                        password_confirmation: p)
 
@@ -48,18 +52,45 @@ describe 'Base User API' do
 
     it 'can be invited and register with twitter'
 
-    it 'can be created logging in with twitter' do
-      # User fills up the signup form with his user name and clicks to register with twitter
-      sign_up = User::Identities::OAuth.identity(user_name: 'foo', 
-                                                 provider: 'twitter')
-      expect(sign_up).to be_valid
-      sign_up.perform
-      # If valid (invite, unique name etc), a user with a pending identity is created
-      # The pending identity identificator is stored in the user's cookies
-      # The user is redirected to twiiter to authorize the app
-      # If the authorization fails the user's pending identity is destroyed
-      # If authorized the user is found through his pending identity and the identity is replaced with the new one.
+    it 'can be created logging in with facebook' do
+      # User fills up the signup form with his user name and clicks to register with facebook
+        omniauth_data = {provider: 'facebook',
+                             uid: '1234567',
+                             info: {
+                               nickname: 'jbloggs',
+                               email: 'joe@bloggs.com',
+                               name: 'Joe Bloggs',
+                               first_name: 'Joe',
+                               last_name: 'Bloggs',
+                               image: 'http://graph.facebook.com/1234567/picture?type=square',
+                               urls: { Facebook: 'http://www.facebook.com/jbloggs' },
+                               location: 'Palo Alto, California',
+                               verified: true},
+                             credentials: {
+                               token: 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
+                               expires_at: 1321747205, # when the access token expires (it always will)
+                               expires: true}, # this will always be true
+                             extra: {
+                               raw_info: {
+                                 id: '1234567',
+                                 name: 'Joe Bloggs',
+                                 first_name: 'Joe',
+                                 last_name: 'Bloggs',
+                                 link: 'http://www.facebook.com/jbloggs',
+                                 username: 'jbloggs',
+                                 location: { id: '123456789', name: 'Palo Alto, California' },
+                                 gender: 'male',
+                                 email: 'joe@bloggs.com',
+                                 timezone: -8,
+                                 locale: 'en_US',
+                                 verified: true,
+                                 updated_time: '2011-11-11T06:21:03+0000'}}}
 
+      sign_up = User::SignUpWithInvite.new(invite_code: a_sign_up_invite.code,
+                                           omniauth_data: omniauth_data)
+      expect(sign_up).to be_valid
+      expect(sign_up.oauth_identity).to be_a(User::Identities::Facebook)
+      sign_up.perform
     end
 
   end

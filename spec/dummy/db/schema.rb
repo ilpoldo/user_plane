@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   end
 
   add_index "user_identities_email_verifications", ["email_id"], name: "index_user_identities_email_verifications_on_email_id", using: :btree
+  add_index "user_identities_email_verifications", ["token"], name: "index_user_identities_email_verifications_on_token", using: :btree
 
   create_table "user_identities_emails", force: true do |t|
     t.integer  "account_id"
@@ -61,15 +62,12 @@ ActiveRecord::Schema.define(version: 20141026230208) do
 
   create_table "user_identities_o_auths", force: true do |t|
     t.integer  "account_id"
-    t.string   "type"
+    t.string   "provider"
     t.string   "uid"
     t.string   "handle"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "user_identities_o_auths", ["handle"], name: "index_user_identities_o_auths_on_handle", using: :btree
-  add_index "user_identities_o_auths", ["type"], name: "index_user_identities_o_auths_on_type", using: :btree
 
   create_table "user_sign_up_invites_invites", force: true do |t|
     t.integer  "stack_id"

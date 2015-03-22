@@ -1,12 +1,16 @@
 require 'spec_helper'
 
 describe User::Identity do
-  describe 'adding identities' do
+  describe 'additional identities' do
+
     let(:account) {Fabricate :user}
-    it 'can an email identity to the account' do
+
+    it 'add email' do
+      p = 'long secret'
       account.email = User::Identities::Email.new(address: 'foo@example.com',
-                                                  password: 'secret',
-                                                  password_confirmation: 'secret')
+                                                  password: p,
+                                                  password_confirmation: p)
+
     end
   end
 end

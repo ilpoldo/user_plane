@@ -10,11 +10,11 @@ module User
 
     has_secure_password
 
-    validates_presence_of :password, on: :create
+    validates :password,  :password_confirmation, presence: true, on: :create
+    validates :password,  confirmation: true,
+                          length: {within: 8..56},
+                          on: :create
 
-
-    # All the profile editing (password reset, email change) stuff should be performed
-    # using some ActiveRecord form object and the user should have a state thing.
     validates :address, presence:   true,
                         uniqueness: {message: 'is taken'},
                         format:     {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
@@ -30,23 +30,14 @@ module User
     def self.unverified
       joins(:email_verifications).where.not(verified_address)
     end
-    
-    def self.must_verify_new_identities
-      false
-    end
 
-    # def self.verified
-    #   joins(:email_verifications, Arel::Nodes::OuterJoin) |
-    #   Identities::EmailVerification.signup_address.unspent
-    # end
-
-    # TODO: add a verified? boolean method - can you change email with an unverified account?
-
+    # Starts the address change process by creating a new email verification token
     def new_address=(new_address)
       email_verifications.create(type: 'AddressChangeVerification',
                                  recipient: new_address)
     end
 
+    # Completes the verification process by redeeming an email verification token
     def verify_new_address! token
       verification = email_verifications.unspent.address_verification.where(token: token).last
       self.address = verification.recipient

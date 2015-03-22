@@ -6,4 +6,5 @@ require 'support_segment'
 require 'support_segment/sti_helpers'
 
 module UserPlane
+  mattr_accessor :parent_controller
 end

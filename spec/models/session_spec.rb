@@ -9,8 +9,8 @@ describe Session do
       session.identity = account.identities.first
       session_hash = session.instance_variable_get '@session'
       new_session = Session.new(session_hash)
-      new_session.identity.should eql(account.identities.first)
-      new_session.user.should eql(account)
+      expect(new_session.identity).to eql(account.identities.first)
+      expect(new_session.user).to eql(account)
     end
 
 
