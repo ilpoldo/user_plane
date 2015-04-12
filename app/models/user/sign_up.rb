@@ -24,29 +24,17 @@ module User
 
     validates :oauth_identity, receiver: {map_attributes: {uid: :account}}
 
-    # Considerations for the email validation procedure
-    # * should be easy to change email for admin / app
-    # * creating an email verification should trigger an email message
-    # * email verification should be optional, based on App configuration
-    # * email uniqueness should be checked when the verification is written
-
     def oauth_data= oauth_data
       @oauth_data = oauth_data
-      self.oauth_identity = Identities::OAuth.find_or_initialize_from_omniauth(oauth_data)
+      @oauth_identity = Identities::OAuth.find_or_initialize_from_omniauth(oauth_data)
     end
-
-    def oauth_identity= sign_up_identity
-      @oauth_identity = sign_up_identity
-      self.account = find_or_build_account_with_oatuh(sign_up_identity)
-    end
-
 
     before_validation do
-      self.account ||= new_account
+      @account = account_from_oauth || new_account
       if email
-        self.email_identity = account.build_email(address: email,
-                                                  password: password,
-                                                  password_confirmation: password_confirmation)
+        self.email_identity = @account.build_email(address: email,
+                                                   password: password,
+                                                   password_confirmation: password_confirmation)
       end
     end
 
@@ -67,6 +55,10 @@ module User
 
         account
       end
+    end
+
+    def account_from_oauth
+      find_or_build_account_with_oatuh(@oauth_identity) if @oauth_identity
     end
 
     def new_account

@@ -110,30 +110,43 @@ describe 'Base User API' do
     end
 
     it 'can set and verify a new email address' do
-      old_identity = a_user.email
       old_address = a_user.email.address
       new_address = Faker::Internet.safe_email
-      
-      login_token = a_user.email.serialize
+      old_address_login_token = a_user.email.serialize
       
       # TODO: wrap this into a command object to update account details
       a_user.email.new_address = new_address
-      # a_user.save
       verification_token = a_user.email.email_verifications.address_verification.last.token
 
-      login = User::Identity.deserialize!(login_token)
-      expect(login).to eql(old_identity)
-
-      expect(a_user.email.address).to eql(old_address)
-
-      # Verifying a new address updates the login token
       a_user.email.verify_new_address! verification_token
-      expect { User::Identity.deserialize!(login_token) }.to raise_error
 
+      expect { User::Identity.deserialize!(old_address_login_token) }.to raise_error
       expect(a_user.email.address).to eql(new_address)
-
     end
-    it 'can cange his password providing the old one'
+
+    it "cannot use an unverified email address change to log in" do
+      old_address = a_user.email.address
+      new_address = Faker::Internet.safe_email
+      old_address_login_token = a_user.email.serialize
+      
+      a_user.email.new_address = new_address
+      verification_token = a_user.email.email_verifications.address_verification.last.token
+
+      expect {login = User::Identity.deserialize!(old_address_login_token)}.not_to raise_error
+      expect(a_user.email.address).to eql(old_address)      
+    end
+
+    it 'can cange his password providing the old one' do
+      new_password = 'new shiny password'
+
+      update = User::UpdateDetails.new(account: a_user,
+                                       old_password: a_user.email.password,
+                                       password: new_password,
+                                       password_confirmation: new_password)
+      update.perform!
+
+      expect(update.account.email.authenticate(new_password)).not_to be false
+    end
 
     it 'can reset the password using a password reset token'
 
@@ -145,7 +158,7 @@ describe 'Base User API' do
       a_user.suspensions.create(message: "Dodgy account")
 
       expect { User::Identity.deserialize!(login_token) }.to raise_error
-  end
+    end
 
     it 'can be an admin, guest, helpdesk or editor'
 
