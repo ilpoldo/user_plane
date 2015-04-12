@@ -6,6 +6,8 @@ module User
     has_one    :email,            class_name: 'User::Identities::Email'
     has_many   :suspensions,      class_name: 'User::Suspension'    
 
+    validates :identities, presence: true
+
     # TODO: customise the user name requirements...
     validates :name, uniqueness: true #, presence: true
 
@@ -18,7 +20,7 @@ module User
     before_create :build_invites_stack
 
     def identities
-      oauth_identities.to_a << email
+      Array(email).concat(oauth_identities)
     end
   end
 

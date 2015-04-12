@@ -54,43 +54,48 @@ describe 'Base User API' do
 
     it 'can be created logging in with facebook' do
       # User fills up the signup form with his user name and clicks to register with facebook
-        omniauth_data = {provider: 'facebook',
-                             uid: '1234567',
-                             info: {
-                               nickname: 'jbloggs',
-                               email: 'joe@bloggs.com',
-                               name: 'Joe Bloggs',
-                               first_name: 'Joe',
-                               last_name: 'Bloggs',
-                               image: 'http://graph.facebook.com/1234567/picture?type=square',
-                               urls: { Facebook: 'http://www.facebook.com/jbloggs' },
-                               location: 'Palo Alto, California',
-                               verified: true},
-                             credentials: {
-                               token: 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
-                               expires_at: 1321747205, # when the access token expires (it always will)
-                               expires: true}, # this will always be true
-                             extra: {
-                               raw_info: {
-                                 id: '1234567',
-                                 name: 'Joe Bloggs',
-                                 first_name: 'Joe',
-                                 last_name: 'Bloggs',
-                                 link: 'http://www.facebook.com/jbloggs',
-                                 username: 'jbloggs',
-                                 location: { id: '123456789', name: 'Palo Alto, California' },
-                                 gender: 'male',
-                                 email: 'joe@bloggs.com',
-                                 timezone: -8,
-                                 locale: 'en_US',
-                                 verified: true,
-                                 updated_time: '2011-11-11T06:21:03+0000'}}}
+        oauth_data = {provider: 'facebook',
+                      uid: '1234567',
+                      info: {
+                        nickname: 'jbloggs',
+                        email: 'joe@bloggs.com',
+                        name: 'Joe Bloggs',
+                        first_name: 'Joe',
+                        last_name: 'Bloggs',
+                        image: 'http://graph.facebook.com/1234567/picture?type=square',
+                        urls: { Facebook: 'http://www.facebook.com/jbloggs' },
+                        location: 'Palo Alto, California',
+                        verified: true},
+                      credentials: {
+                        token: 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
+                        expires_at: 1321747205, # when the access token expires (it always will)
+                        expires: true}, # this will always be true
+                      extra: {
+                        raw_info: {
+                          id: '1234567',
+                          name: 'Joe Bloggs',
+                          first_name: 'Joe',
+                          last_name: 'Bloggs',
+                          link: 'http://www.facebook.com/jbloggs',
+                          username: 'jbloggs',
+                          location: { id: '123456789', name: 'Palo Alto, California' },
+                          gender: 'male',
+                          email: 'joe@bloggs.com',
+                          timezone: -8,
+                          locale: 'en_US',
+                          verified: true,
+                          updated_time: '2011-11-11T06:21:03+0000'}}}
 
       sign_up = User::SignUpWithInvite.new(invite_code: a_sign_up_invite.code,
-                                           omniauth_data: omniauth_data)
+                                           oauth_data: oauth_data)
       expect(sign_up).to be_valid
       expect(sign_up.oauth_identity).to be_a(User::Identities::Facebook)
       sign_up.perform
+    end
+
+    it 'must have an identity' do
+      sign_up = User::SignUpWithInvite.new(invite_code: a_sign_up_invite.code)
+      expect(sign_up).not_to be_valid
     end
 
   end
