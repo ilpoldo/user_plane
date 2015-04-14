@@ -10,6 +10,10 @@ module User
 
     has_secure_password
 
+    before_validation do
+      self.build_id_token if (address_changed? || password_digest_changed?)
+    end
+
     validates :password,  :password_confirmation, presence: true, on: :create
     validates :password,  confirmation: true,
                           length: {within: 8..56},
@@ -31,22 +35,25 @@ module User
       joins(:email_verifications).where.not(verified_address)
     end
 
-    # Starts the address change process by creating a new email verification token
-    def new_address=(new_address)
-      email_verifications.create(type: 'AddressChangeVerification',
-                                 recipient: new_address)
-    end
-
     # Completes the verification process by redeeming an email verification token
-    def verify_new_address! token
-      verification = email_verifications.unspent.address_verification.where(token: token).last
-      self.address = verification.recipient
+    def self.verify_new_address! token
+      verification = Identities::EmailVerification.unspent.address_verification.find_by(token: token)
+      raise ActiveRecord::RecordNotFound unless verification
+      verification.email.address = verification.recipient
 
       ActiveRecord::Base.transaction do
         verification.spend!
-        save!
+        verification.email.save!
       end
     end
+
+    # Starts the address change process by creating a new email verification token
+    def change_address(new_address)
+      email_verifications.create(type: 'AddressChangeVerification',
+                                 recipient: new_address)
+    end
+    alias_method :new_address=, :change_address
+
 
   end
 

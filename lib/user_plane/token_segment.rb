@@ -12,8 +12,12 @@ module TokenSegment
       validate attribute, uniqueness: true
 
       if life_span = options[:expires_in]
-        scope :stale, -> {unscoped.where(:created_at.gt => life_span.ago)}
-        default_scope -> {where(:created_at.gt => life_span.ago)}
+        scope :stale, -> {unscoped.where('created_at <= ?', life_span.ago)}
+        default_scope -> {where('created_at > ?', life_span.ago)}
+
+        define_method :stale? do
+          created_at <= life_span.ago
+        end
       end
 
       define_method :"regenerate_#{attribute}" do

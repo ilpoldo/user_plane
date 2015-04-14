@@ -32,9 +32,9 @@ module User
     before_validation do
       @account = account_from_oauth || new_account
       if email
-        self.email_identity = @account.build_email(address: email,
-                                                   password: password,
-                                                   password_confirmation: password_confirmation)
+        @email_identity = @account.build_email(address: email,
+                                               password: password,
+                                               password_confirmation: password_confirmation)
       end
     end
 

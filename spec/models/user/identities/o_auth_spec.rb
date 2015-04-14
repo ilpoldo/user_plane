@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe User::Identities::OAuth do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'creates the identity from oauth data'
 end

@@ -49,6 +49,10 @@ module User
       validates :uid, presence: true,
                       uniqueness: {scope: :provider}
 
+      before_validation do
+        self.build_id_token
+      end
+
       def ominauth_data= new_ominauth_data
         self.uid = new_ominauth_data[:uid]
         self.handle = new_ominauth_data[:info][:name]

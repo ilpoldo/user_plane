@@ -6,7 +6,7 @@ class User::Identities::EmailVerification < ActiveRecord::Base
 
   belongs_to      :email
 
-  has_token :token, regenerate_on: :create do
+  has_token :token, expires_in: 2.weeks, regenerate_on: :create do
     "#{Time.now}-#{rand}-#{recipient}"
   end
 
@@ -24,14 +24,6 @@ class User::Identities::EmailVerification < ActiveRecord::Base
 
   def self.password_reset
     where(type: 'PasswordReset')
-  end
-
-  def self.fresh
-    where(arel_table[:created_at] < 2.weeks.ago)
-  end
-
-  def self.stale
-    where.not(arel_table[:created_at] < 2.weeks.ago)
   end
 
   def spend!

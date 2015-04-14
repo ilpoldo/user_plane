@@ -1,11 +1,10 @@
 module User
-
   class Identity < ActiveRecord::Base
     self.abstract_class = true
 
     def serialize
       # TODO: create the token when it's missing
-      self.id_token.key
+      id_token.key
     end
 
     def self.deserialize id_token
@@ -21,10 +20,5 @@ module User
       identity
     end
 
-    before_validation do
-      self.build_id_token
-    end
-
   end
-
 end
