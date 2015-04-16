@@ -8,7 +8,7 @@ module User
     end
 
     action do
-      password_reset = @email_identity.password_reset.create(recipient: email_identity.address)
+      password_reset = @email_identity.reset_password!
       @token = password_reset.token
     end
     

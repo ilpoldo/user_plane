@@ -13,7 +13,7 @@ module TokenSegment
 
       if life_span = options[:expires_in]
         scope :stale, -> {unscoped.where('created_at <= ?', life_span.ago)}
-        default_scope -> {where('created_at > ?', life_span.ago)}
+        scope :fresh, -> {where('created_at > ?', life_span.ago)}
 
         define_method :stale? do
           created_at <= life_span.ago

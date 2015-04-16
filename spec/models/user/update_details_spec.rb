@@ -22,7 +22,7 @@ describe User::UpdateDetails do
     end
 
     it 'update the address once verified' do
-      User::Identities::Email.verify_new_address! update_details.email_verification_token
+      User::Identities::Email.verify_address! update_details.email_verification_token
       expect(a_user.email.address).to eql(new_address)
     end
 
@@ -33,7 +33,7 @@ describe User::UpdateDetails do
     context 'the old login token' do
 
       it 'expires when the address is confirmed' do
-        User::Identities::Email.verify_new_address! update_details.email_verification_token
+        User::Identities::Email.verify_address! update_details.email_verification_token
         expect { User::Identity.deserialize!(old_login_token) }.to raise_error
       end
 
@@ -44,7 +44,6 @@ describe User::UpdateDetails do
   end
 
   context 'when updating the password' do
-    let     (:new_password) { 'new shiny password' }
     let!    (:current_password) { a_user.email.password }
 
     context 'providing the current password' do

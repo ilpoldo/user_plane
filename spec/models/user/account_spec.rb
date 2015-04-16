@@ -11,8 +11,6 @@ describe User::Account do
 
   describe 'an existing user' do
 
-    it 'can reset the password using a password reset token'
-
     it 'can forget an identity'
 
     it 'can be disabled' do
