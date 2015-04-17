@@ -8,7 +8,6 @@ RSpec.shared_context 'user' do
 
   let (:new_password) { 'new shiny password' }
 
-
   let :invite_recipient do
     Faker::Internet.safe_email
   end

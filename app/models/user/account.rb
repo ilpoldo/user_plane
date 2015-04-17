@@ -2,8 +2,10 @@ module User
 
   class Account < ActiveRecord::Base
 
-    has_many   :oauth_identities, class_name: 'User::Identities::OAuth'
-    has_one    :email,            class_name: 'User::Identities::Email'
+    has_many   :oauth_identities, class_name: 'User::Identities::OAuth',
+                                  autosave: true
+    has_one    :email,            class_name: 'User::Identities::Email',
+                                  autosave: true
     has_many   :suspensions,      class_name: 'User::Suspension'    
 
     validates :identities, presence: true

@@ -1,5 +1,13 @@
-# TODO: rename the class EmailVerification
 module User::Identities
+
+  # An EmailVerification is a token that is sent to a specific recipient and
+  # it is used to perform a task while confirming email validation.
+  # 
+  # Once used the token should be marked as spent, that will ensure that the
+  # token is fresh and hasn't been used before via validation.
+  #
+  # It is used by Identities::Email to verify an email address at signup,
+  # validate email address changes and reset the password.
   class EmailVerification < ActiveRecord::Base
     include TokenSegment
 
@@ -10,6 +18,9 @@ module User::Identities
     has_token :token, expires_in: 2.weeks, regenerate_on: :create do
       "#{Time.now}-#{rand}-#{recipient}"
     end
+
+    validates :recipient, presence: true,
+                          format:     {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
 
     validates_with UserPlane::FreshValidator, if: :spent_at_changed?
     validates_each :spent_at, if: :spent_at_changed? do |record, attr, value|

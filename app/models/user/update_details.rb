@@ -10,8 +10,6 @@ module User
 
     attribute :account
 
-    attr_reader :email_verification_token
-
     delegate :password, :password=, to: :password_details
     delegate :password_confirmation, :password_confirmation=, to: :password_details
     delegate :current_password, :current_password=, to: :password_details
@@ -34,9 +32,7 @@ module User
     end
 
     action do
-      ActiveRecord::Base.transaction do
-        raise ActiveRecord::Rollback unless @account.save
-      end
+      @account.save
     end
 
     def email
@@ -47,9 +43,12 @@ module User
       if email_identity.new_record?
         email_identity.address = address
       else
-        verification = email_identity.change_address(address)
-        @email_verification_token = verification.token
+        email_identity.unverified_address = address
       end
+    end
+
+    def email_verification_token
+      email_identity.address_change_verification.token if email_identity.unverified_address_changed?
     end
 
     # Returns ture if a new password was set, but the change was rejected.
