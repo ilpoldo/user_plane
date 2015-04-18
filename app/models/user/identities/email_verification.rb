@@ -10,7 +10,6 @@ module User::Identities
   # validate email address changes and reset the password.
   class EmailVerification < ActiveRecord::Base
     include TokenSegment
-
     self.inheritance_column = nil
 
     belongs_to      :email

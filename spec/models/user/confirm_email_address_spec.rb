@@ -14,7 +14,7 @@ describe User::ConfirmEmailAddress do
 
 
     subject :confirm_email_address do
-      described_class.new(verification: address_change_verification_token)
+      described_class.new(code: address_change_verification_token)
     end
 
     it {is_expected.to be_valid}
@@ -42,26 +42,26 @@ describe User::ConfirmEmailAddress do
       
       context 'cannot be redeemed anymore' do        
         subject :verifying_again do
-          verifying_again = described_class.new(verification: address_change_verification_token)
+          verifying_again = described_class.new(code: address_change_verification_token)
           verifying_again.valid?
           verifying_again
         end
 
         it {is_expected.not_to be_valid}
-        it {expect(verifying_again.errors.messages[:verification].size).to eq(1)}
+        it {expect(verifying_again.errors.messages[:code].size).to eq(1)}
       end
     end
   end
 
   context 'without a valid verification token' do
     subject :confirmation_with_bad_token do
-      email_address_confirmation = described_class.new(verification: 'not a valid token')
+      email_address_confirmation = described_class.new(code: 'not a valid token')
       email_address_confirmation.valid?
       email_address_confirmation
     end
 
     it {is_expected.not_to be_valid}
-    it {expect(confirmation_with_bad_token.errors.messages[:verification].size).to eq(1)}
+    it {expect(confirmation_with_bad_token.errors.messages[:code].size).to eq(1)}
   end
 
   context 'with an expired verification' do
@@ -73,13 +73,13 @@ describe User::ConfirmEmailAddress do
     end
 
     subject :confirmation_with_stale_token do
-      email_address_confirmation = described_class.new(verification: stale_verification_token)
+      email_address_confirmation = described_class.new(code: stale_verification_token)
       email_address_confirmation.valid?
       email_address_confirmation
     end
 
     it {is_expected.not_to be_valid}
-    it {expect(confirmation_with_stale_token.errors.messages[:verification].size).to eq(1)}
+    it {expect(confirmation_with_stale_token.errors.messages[:code].size).to eq(1)}
   end
 
 end

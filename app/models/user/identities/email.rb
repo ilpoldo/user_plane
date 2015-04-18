@@ -14,9 +14,8 @@ module User
     end
 
     validates :password,  :password_confirmation, presence: true, on: :create
-    validates :password,  confirmation: true,
-                          length: {within: 8..56},
-                          on: :create
+    validates :password,  length: {within: 8..56},
+                          if: :password_digest_changed?
 
     # TODO: move the address format validation in a custom validator.
     validates :address, presence:   true,

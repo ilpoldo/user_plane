@@ -5,21 +5,30 @@ module User
     attribute :password
     attribute :password_confirmation
 
+    attr_accessor :code
     attr_accessor :verification
     attr_accessor :identity
 
-    validates :verification, presence: true
-    validates :verification, receiver: {map_attributes: {created_at: :verification,
-                                                         base:       :verification,
-                                                         spent_at:   :verification}}
+    validates :password, :password_confirmation, presence: true
+    validates :verification, presence: true,
+                             receiver: {map_attributes: {created_at: :code,
+                                                         base:       :code,
+                                                         spent_at:   :code}}
+    validate {|r| r.errors.add(:code, 'Is not valid') unless r.verification}
+    validates :identity, receiver: {map_attributes: {password: :password,
+                                                     password_confirmation: :password_confirmation}}
 
-    def verification= token
-      @verification = Identities::EmailVerification.password_reset.find_by(token: token)
+    def code= token
+      @code = token
+
+      password_reset_query = User::Identities::EmailVerification.password_reset.where(token: code)
+      if @identity = User::Identities::Email.joins(:verifications).merge(password_reset_query).first
+        @verification = identity.verifications.detect {|v| v.token == code}
+      end
     end
 
     before_validation do
       if verification
-        @identity = verification.email
         identity.attributes = {password: password,
                                password_confirmation: password_confirmation}
         verification.spend
@@ -27,10 +36,8 @@ module User
     end
 
     action do
-      ActiveRecord::Base.transaction do
-        verification.save!
-        identity.save!
-      end
+      binding.pry unless verification.valid?
+      identity.save
     end
   end
 end

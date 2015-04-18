@@ -13,6 +13,5 @@ describe User::Identities::EmailVerification do
     it {is_expected.to be_stale}
   end
 
-  it 'cannot be created with a badly formatted email address'
-
+  it 'can be spent only while fresh'
 end

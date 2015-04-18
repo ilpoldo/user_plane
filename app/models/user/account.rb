@@ -6,7 +6,7 @@ module User
                                   autosave: true
     has_one    :email,            class_name: 'User::Identities::Email',
                                   autosave: true
-    has_many   :suspensions,      class_name: 'User::Suspension'    
+    has_many   :suspensions,      class_name: 'User::Suspension'
 
     validates :identities, presence: true
 
