@@ -13,6 +13,7 @@ module User
                                                          base:       :code,
                                                          spent_at:   :code}}
     validate {|r| r.errors.add(:code, 'Is not valid') unless r.verification}
+    validates :identity, receiver: {map_attributes: {address: :email}}
 
     def code= token
       @code = token

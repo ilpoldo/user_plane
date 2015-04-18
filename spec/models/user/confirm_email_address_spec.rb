@@ -82,4 +82,20 @@ describe User::ConfirmEmailAddress do
     it {expect(confirmation_with_stale_token.errors.messages[:code].size).to eq(1)}
   end
 
+  context 'when the address being verified is taken' do
+    let (:address_change_verification_token) do
+      address_verification = a_user.email.verifications.address_change_verification.create(recipient: new_address)
+      address_verification.token
+    end
+
+    subject :confirm_email_address do
+      conflicting_signup = Fabricate(:user_sign_up, email: new_address)
+      conflicting_signup.perform!
+
+      described_class.new(code: address_change_verification_token)
+    end
+
+    it {is_expected.not_to be_valid}
+  end
+
 end

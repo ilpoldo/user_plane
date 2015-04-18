@@ -1,16 +1,17 @@
 module User
   class SendPasswordReset < Imperator::Command
-    attribute :email
-    attr_reader :token
+    attribute :recipient
+    attr_accessor :code
+    attr_accessor :identity
 
-    def email= address
-      @email_identity = User::Identities::Email.find_by(address: address)
+    def recipient= address
+      @identity = User::Identities::Email.find_by(address: address)
     end
 
     action do
-      if @email_identity
-        password_reset = @email_identity.reset_password!
-        @token = password_reset.token
+      if identity
+        password_reset = identity.reset_password!
+        @code = password_reset.token
       end
     end
     

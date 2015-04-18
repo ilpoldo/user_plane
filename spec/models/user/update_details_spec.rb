@@ -5,7 +5,7 @@ describe User::UpdateDetails do
   include_context 'user'
 
   context 'when changing the email address' do
-    it 'should not if the new email is already taken'
+    it 'errors if the new email is already taken'
   end
 
   context 'after changing the email address' do
