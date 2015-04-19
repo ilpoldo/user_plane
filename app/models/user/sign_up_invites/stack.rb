@@ -4,7 +4,7 @@ class User::SignUpInvites::Stack < ActiveRecord::Base
   after_initialize :set_remaining_invites
 
   # FIXME: the validation above should be enough, but doesn't seem to take effect
-  # validate :remaining_invites, numericality: {greater_than_or_equal: 0}
+  # validates :remaining_invites, numericality: {greater_than_or_equal: 0}
   validate do |record|
     record.errors.add(:remaining_invites, :greater_than_or_equal, value: 0) unless (record.remaining_invites >= 0)
   end 
