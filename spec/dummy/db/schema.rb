@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
 
   create_table "user_sign_up_invites_invites", force: true do |t|
     t.integer  "stack_id"
+    t.integer  "sender_id"
     t.string   "code"
     t.string   "recipient"
     t.integer  "account_id"

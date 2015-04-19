@@ -11,7 +11,7 @@ module User
     action do
       if identity
         password_reset = identity.reset_password!
-        @code = password_reset.token
+        @code ||= password_reset.token
       end
     end
     

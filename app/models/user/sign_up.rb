@@ -29,11 +29,11 @@ module User
     end
 
     before_validation do
-      @account = account_from_oauth || new_account
+      @account ||= account_from_oauth || new_account
       if email
-        @email_identity = @account.build_email(address: email,
-                                               password: password,
-                                               password_confirmation: password_confirmation)
+        @email_identity ||= @account.build_email(address: email,
+                                                 password: password,
+                                                 password_confirmation: password_confirmation)
       end
     end
 

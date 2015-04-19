@@ -3,8 +3,8 @@ module User::SignUpInvites
     include TokenSegment
 
     belongs_to      :stack
+    belongs_to      :sender, class_name: 'User::Account'
     has_token       :code
 
-    validates :stack, receiver: true, on: :create
   end
 end

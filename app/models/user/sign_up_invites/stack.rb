@@ -1,6 +1,6 @@
 class User::SignUpInvites::Stack < ActiveRecord::Base
   belongs_to :owner,  polymorphic: true
-  has_many :invites, after_add: :decrement_remaining_invites
+  has_many :invites, before_add: :decrement_remaining_invites
   after_initialize :set_remaining_invites
 
   # FIXME: the validation above should be enough, but doesn't seem to take effect
@@ -12,7 +12,7 @@ class User::SignUpInvites::Stack < ActiveRecord::Base
 private
 
   def decrement_remaining_invites invite
-    decrement(:remaining_invites)
+    self.remaining_invites -= 1 
   end
 
   def set_remaining_invites

@@ -1,10 +1,12 @@
 RSpec.shared_context 'user' do
 
-  let(:a_user) do
+  def make_singed_up_user
     sign_up = Fabricate(:user_sign_up)
     sign_up.perform!
     sign_up.account
   end
+
+  let(:a_user) {make_singed_up_user}
 
   let (:new_password) { 'new shiny password' }
 
@@ -13,11 +15,8 @@ RSpec.shared_context 'user' do
   end
 
   let :a_sign_up_invite do
-    # TODO: do not make this depend on SendSignUpInvite
-    send_sign_up_invite  = User::SendSignUpInvite.new(sender: a_user,
-                                                      recipient: invite_recipient)
-    send_sign_up_invite.perform
-    send_sign_up_invite.invite
+    User::SignUpInvites::Invite.create(sender: make_singed_up_user,
+                                       recipient: invite_recipient)
   end
 
   let :facebook_oauth_data do
