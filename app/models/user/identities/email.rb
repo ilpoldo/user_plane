@@ -17,10 +17,9 @@ module User
     validates :password,  length: {within: 8..56},
                           if: :password_digest_changed?
 
-    # TODO: move the address format validation in a custom validator.
     validates :address, presence:   true,
-                        uniqueness: {message: 'is taken'},
-                        format:     {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
+                        uniqueness: true,
+                        email:      true
 
     # TODO: move these in the relation scope?
     current_address = arel_table[:address].eq(Identities::EmailVerification.arel_table[:recipient])

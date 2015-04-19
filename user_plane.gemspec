@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '~> 4.1.8'
   s.add_dependency 'bcrypt'
   s.add_dependency 'imperator'
+  s.add_dependency 'email_validator'
   s.add_dependency 'support_segment'
   s.add_dependency 'omniauth-github'
   s.add_dependency 'omniauth-facebook'

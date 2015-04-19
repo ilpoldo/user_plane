@@ -19,7 +19,7 @@ module User::Identities
     end
 
     validates :recipient, presence: true,
-                          format:     {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
+                          email: true
 
     validates_with UserPlane::FreshValidator, if: :spent_at_changed?
     validates_each :spent_at, if: :spent_at_changed? do |record, attr, value|

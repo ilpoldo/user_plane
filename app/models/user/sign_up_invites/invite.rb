@@ -6,5 +6,7 @@ module User::SignUpInvites
     belongs_to      :sender, class_name: 'User::Account'
     has_token       :code
 
+    validates :recipient, email: true
+
   end
 end

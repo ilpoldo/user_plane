@@ -3,6 +3,7 @@ PATH
   specs:
     user_plane (0.0.1)
       bcrypt
+      email_validator
       imperator
       omniauth-facebook
       omniauth-github
@@ -76,7 +77,9 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
-    equalizer (0.0.9)
+    email_validator (1.5.0)
+      activemodel
+    equalizer (0.0.11)
     erubis (2.7.0)
     execjs (2.4.0)
     fabrication (2.12.2)
@@ -111,8 +114,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    hashie (3.4.0)
-    hike (1.2.3)
+    hashie (3.4.1)
     hitimes (1.2.2)
     i18n (0.7.0)
     ice_nine (0.11.1)
@@ -128,7 +130,7 @@ GEM
       rake
     jasmine-core (2.2.0)
     json (1.8.2)
-    jwt (1.3.0)
+    jwt (1.4.1)
     listen (2.8.5)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -246,11 +248,8 @@ GEM
     rspec-support (3.2.2)
     shellany (0.0.1)
     slop (3.6.0)
-    sprockets (2.12.3)
-      hike (~> 1.2)
-      multi_json (~> 1.0)
+    sprockets (3.0.1)
       rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
     sprockets-rails (2.2.4)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -266,7 +265,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uuidtools (2.1.5)
-    virtus (1.0.4)
+    virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
