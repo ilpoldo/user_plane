@@ -20,8 +20,12 @@ module User
     validates :account,        receiver: {map_attributes: {name:       :user_name,
                                                            identities: :email_or_omniauth}}
 
-    validates_each :current_password do |record, attr, value|
-      record.errors.add(attr, 'is not correct') if record.failed_password_change?
+    validate do |record|
+      record.errors.add(:current_password, 'is not correct') if record.failed_password_change?
+      if new_address = email_identity.unverified_address 
+        existing_identity = User::Identities::Email.where(address: new_address).first
+        record.errors.add(:email, :taken, value: new_address) if existing_identity
+      end
     end
 
     before_validation do
@@ -47,7 +51,7 @@ module User
       end
     end
 
-    def email_verification_token
+    def email_verification_code
       email_identity.address_change_verification.token if email_identity.unverified_address_changed?
     end
 

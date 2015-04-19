@@ -12,6 +12,8 @@ describe User::SendSignUpInvite do
   end
 
   context 'validation errors' do
-    it 'has no more invites'
+    before do
+      allow(a_user)
+    end
   end
 end

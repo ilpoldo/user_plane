@@ -20,15 +20,5 @@ describe User::Account do
 
       expect { User::Identity.deserialize!(login_token) }.to raise_error
     end
-
-    it 'can be an admin, guest, helpdesk or editor'
-
   end
-
-  describe 'user type changes' do
-    
-    it 'is recorded'
-
-  end
-
 end

@@ -13,10 +13,10 @@ module User
     # TODO: customise the user name requirements...
     validates :name, uniqueness: true #, presence: true
 
-    # TODO: customise who has the invite stack?
+    # TODO: turn this into a configuration option?
     # in the event scenario the invites are shared across a party.    
     has_one    :invites_stack, class_name: 'User::SignUpInvites::Stack',
-                               autosave: true
+                               as: :owner
     has_one    :invite,        class_name: 'User::SignUpInvites::Invite'
 
     before_create :build_invites_stack

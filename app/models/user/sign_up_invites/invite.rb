@@ -4,5 +4,7 @@ module User::SignUpInvites
 
     belongs_to      :stack
     has_token       :code
+
+    validates :stack, receiver: true, on: :create
   end
 end

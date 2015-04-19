@@ -4,27 +4,34 @@ require 'shared_contexts/user'
 describe User::UpdateDetails do
   include_context 'user'
 
-  context 'when changing the email address' do
-    it 'errors if the new email is already taken'
+  let     (:new_address) { Faker::Internet.safe_email }
+
+  it 'errors if the new email is already taken' do
+    conflicting_signup = Fabricate(:user_sign_up, email: new_address)
+    conflicting_signup.perform!
+
+    update_details = described_class.new(account: a_user, email: new_address)
+
+    expect(update_details).not_to be_valid
   end
 
   context 'after changing the email address' do
 
-    let     (:new_address) { Faker::Internet.safe_email }
     let!    (:old_address) { a_user.email.address }
     let!    (:old_login_token) {a_user.email.serialize}
 
     subject (:update_details) {described_class.new(account: a_user, email: new_address)}
 
-    let! :email_verification_token do
+    let! :email_verification_code do
       update_details.perform!
-      token = update_details.email_verification_token
+      code = update_details.email_verification_code
       a_user.reload
-      token
+      code
     end
 
+
     it 'updates the address once verified' do
-      User::Identities::Email.verify_address! email_verification_token
+      User::Identities::Email.verify_address! email_verification_code
       a_user.reload
       expect(a_user.email.address).to eql(new_address)
     end
@@ -36,7 +43,7 @@ describe User::UpdateDetails do
     context 'the old login token' do
 
       it 'expires when the address is confirmed' do
-        User::Identities::Email.verify_address! email_verification_token
+        User::Identities::Email.verify_address! email_verification_code
         a_user.reload
         expect { User::Identity.deserialize!(old_login_token) }.to raise_error
       end

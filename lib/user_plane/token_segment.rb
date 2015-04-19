@@ -16,7 +16,11 @@ module TokenSegment
         scope :fresh, -> {where('created_at > ?', life_span.ago)}
 
         define_method :stale? do
-          created_at <= life_span.ago
+          if new_record?
+            false
+          else
+            created_at <= life_span.ago
+          end
         end
       end
 

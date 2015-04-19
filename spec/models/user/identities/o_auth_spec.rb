@@ -1,5 +1,12 @@
 require 'spec_helper'
+require 'shared_contexts/user'
 
 describe User::Identities::OAuth do
-  it 'creates the identity from oauth data'
+  include_context 'user'
+
+  it 'creates the identity from oauth data' do
+    oauth_identity = described_class.find_or_initialize_from_omniauth(facebook_oauth_data)
+
+    expect(oauth_identity).to be_a(User::Identities::Facebook)
+  end
 end

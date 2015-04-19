@@ -79,7 +79,8 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   end
 
   create_table "user_sign_up_invites_stacks", force: true do |t|
-    t.integer  "account_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
     t.integer  "remaining_invites"
     t.datetime "created_at"
     t.datetime "updated_at"

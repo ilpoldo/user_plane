@@ -1,4 +1,3 @@
-
 module User
   class SignUp < Imperator::Command
     include ActiveModel::Validations::Callbacks
