@@ -1,11 +1,23 @@
 Rails.application.routes.draw do
 
-  concern :sign_up, UserPlane::RouteConcerns::SignUp.new()
+  concern :base, UserPlane::RouteConcerns::Base.new()
+  concern :sign_up, UserPlane::RouteConcerns::Invites.new()
   concern :email_identity, UserPlane::RouteConcerns::EmailIdentity.new()
 
-  scope '/accounts' do
+  # Users as a resource
+  # The User class is a profile class that belongs to the account
+  # resources :user, except: [:new, :create] do
+  #   concerns :base
+  #   concerns :sign_up
+  #   concerns :email_identity      
+  # end
+
+  # Alternatively as a singleton scope
+  scope '/account' do
+    concerns :base
     concerns :sign_up
     concerns :email_identity
   end
+
 
 end

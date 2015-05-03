@@ -55,9 +55,9 @@ class Session
 
   # Retrieves the identity from using the identity id and creation time stored in the session
   def identity
-    login = @session[:identity]
-    if login &&  login[:expires_at] > Time.now 
-      @identity ||= User::Identity.deserialize!(login[:id_token])
+    identity = @session[:identity]
+    if identity &&  identity[:expires_at] > Time.now 
+      @identity ||= User::Identity.deserialize!(identity[:id_token])
     else
       nil
     end
@@ -69,7 +69,7 @@ class Session
   end
 
   # Returns _true_ if the user is logged in, otherwise returns _false_.
-  def logged_in?
+  def signed_in?
     identity ? true : false
   end
       
@@ -82,9 +82,9 @@ private
   
   # Renews session expiration for the next 45 minutes if the session is still fresh
   def refresh!
-    login = @session[:identity]
-    if logged_in? && login[:expires_at] < Session.identity_lifetime.from_now 
-      login[:expires_at] = Session.identity_lifetime.from_now
+    identity = @session[:identity]
+    if signed_in? && identity[:expires_at] < Session.identity_lifetime.from_now 
+      identity[:expires_at] = Session.identity_lifetime.from_now
     end
   end
 

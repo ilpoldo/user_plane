@@ -1,3 +1,4 @@
+require 'user_plane/signed_in_constraint'
 require 'user_plane/route_concerns'
 
 require 'user_plane/engine'
