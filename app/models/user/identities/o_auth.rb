@@ -28,7 +28,7 @@ module User
 
       def class_from_provider_name provider_name
         # TODO: build an unrecognized provider and have it caught by validations
-        if_not_found = -> {raise Exception('Unknown oauth provider')}
+        if_not_found = -> {raise Exception.new('Unknown oauth provider')}
         descendants.detect(if_not_found) do |p|
           p.provider_name == provider_name
         end

@@ -9,6 +9,8 @@ describe User::Account do
     expect(new_user).not_to be_valid
   end
 
+  it 'has a uuid'
+
   describe 'an existing user' do
 
     it 'can forget an identity'

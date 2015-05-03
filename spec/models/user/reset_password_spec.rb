@@ -32,6 +32,7 @@ describe User::ResetPassword do
       it {is_expected.to be_valid}
 
       it 'resets the password' do
+        binding.pry
         reset_password.perform!
         a_user.reload
         expect(a_user.email.authenticate(new_password)).not_to be false

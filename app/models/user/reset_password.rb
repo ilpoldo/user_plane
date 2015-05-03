@@ -27,6 +27,12 @@ module User
       end
     end
 
+    def verification= verification
+      @code = verification.token
+      @verification = verification
+      @identity = verification.identity
+    end
+
     before_validation do
       if verification
         identity.attributes = {password: password,

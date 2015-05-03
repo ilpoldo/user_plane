@@ -15,6 +15,7 @@ module User
     validate {|r| r.errors.add(:code, 'Is not valid') unless r.verification}
     validates :identity, receiver: {map_attributes: {address: :email}}
 
+    # FIXME: a lot of duplication with reset_password
     def code= token
       @code = token
 
@@ -22,6 +23,12 @@ module User
       if @identity = User::Identities::Email.joins(:verifications).merge(address_verification_query).first
         @verification = identity.verifications.detect {|v| v.token == code}
       end
+    end
+
+    def verification= verification
+      @code = verification.token
+      @verification = verification
+      @identity = verification.identity
     end
 
 

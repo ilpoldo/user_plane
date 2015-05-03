@@ -1,2 +1,5 @@
-UserPlane::Engine.routes.draw do
+module UserPlane
+  Engine.routes.draw do
+
+  end  
 end
