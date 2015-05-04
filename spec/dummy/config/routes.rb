@@ -12,12 +12,11 @@ Rails.application.routes.draw do
   #   concerns :email_identity      
   # end
 
-  # Alternatively as a singleton scope
+  # Alternatively as a simple scope
   scope '/account' do
     concerns :base
     concerns :sign_up
     concerns :email_identity
   end
-
 
 end

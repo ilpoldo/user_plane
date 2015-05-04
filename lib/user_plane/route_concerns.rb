@@ -21,14 +21,40 @@ module UserPlane
       end
     end
 
-
+    # Defines a signed_in routing concern to ensure that child routes are accessible
+    # only to signed in users.
+    # It defines a route to edit the account details and one to sign in and sign out.
+    #
+    # To enforce being singed in to certain resources:
+    # resource :score, concern: :signed_in
+    #
+    # scope '/profile' concern: :signed_in do
+    #   resource :score
+    #   resource :buddies
+    # end
+    #
     class Base < AbstractConcern
+
+      def initialize(defaults = nil)
+        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| 'SignedInConstraint'}
+        super defaults
+      end
+
+      def singed_in_constraint
+        @sign_in_constraint.constantize
+      end
+
       def build(mapper, options)
+        mapper.concern :signed_in do
+          scope constraint: sign_in_constraint.new() {yield}
+        end
+
         mapper.resource :session, options.call(only: [:new, :create, :destroy])
+
         mapper.resource :details, options.call(only: [:edit, :update],
                                                as: :update_details,
                                                on: :member,
-                                               constraints: SignedInConstraint.new())
+                                               concern: :signed_in)
       end
     end
 
@@ -44,12 +70,9 @@ module UserPlane
         mapper.resources :sign_up, options.call(only: [:edit, :update],
                                                 as: :sign_up_with_invite,
                                                 param: :code)
-
-        #TODO: Add a logged in constraint
         mapper.resources :invite, options.call(only: [:new, :create],
                                                as: :send_sign_up_invites,
-                                               constraints: SignedInConstraint.new())
-
+                                               concern: :signed_in)
       end
     end
 
