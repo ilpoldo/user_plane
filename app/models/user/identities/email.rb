@@ -13,7 +13,6 @@ module User
       self.build_id_token if (address_changed? || password_digest_changed?)
     end
 
-    validates :password,  :password_confirmation, presence: true, on: :create
     validates :password,  length: {within: 8..56},
                           if: :password_digest_changed?
 

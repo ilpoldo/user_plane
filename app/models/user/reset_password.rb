@@ -42,7 +42,6 @@ module User
     end
 
     action do
-      binding.pry unless verification.valid?
       identity.save
     end
   end

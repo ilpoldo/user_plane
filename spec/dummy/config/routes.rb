@@ -19,4 +19,12 @@ Rails.application.routes.draw do
     concerns :email_identity
   end
 
+  # scope '/foo' do
+  #   namespace 'user', path: '/' do
+  #     resource :session
+  #   end
+    
+  # end
+  # resource :session, namepsace: :user
+
 end

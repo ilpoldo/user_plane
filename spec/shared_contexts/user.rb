@@ -10,8 +10,12 @@ RSpec.shared_context 'user' do
 
   let (:new_password) { 'new shiny password' }
 
+  let :invite_recipient_user_name do
+    Faker::Internet.user_name
+  end
+
   let :invite_recipient do
-    Faker::Internet.safe_email
+    "#{invite_recipient_user_name}@example.com"
   end
 
   let :a_sign_up_invite do

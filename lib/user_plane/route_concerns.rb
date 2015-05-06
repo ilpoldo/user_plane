@@ -1,11 +1,13 @@
 module UserPlane
   module RouteConcerns
 
-    DEFAULTS = {module: 'user_plane', shallow_prefix: true, on: :collection}
+    DEFAULTS = {namespace: 'user', on: :collection}
 
     class AbstractConcern
       def initialize(defaults = nil)
-        @defaults = defaults || RouteConcerns::DEFAULTS
+        defaults ||= RouteConcerns::DEFAULTS
+        @namespace = defaults[:namespace]
+        @defaults = defaults.except(:namespace)
       end
 
       # The abstract concern should be able to handle resources having a preferred
@@ -17,12 +19,19 @@ module UserPlane
         else
           options_factory = lambda { |o| @defaults.merge(options).merge(o).except(:on) }
         end
-        build(mapper, options_factory)
+
+        mapper.namespace @namespace, path: '/' do
+          build(mapper, options_factory)
+        end
       end
     end
 
-    # Defines a signed_in routing concern to ensure that child routes are accessible
-    # only to signed in users.
+    # Defines two resources:
+    # A session resource to sign a user in and out
+    # A details resource to let a user change the account's details
+    # It also defines an extra concern
+    # And a signed_in routing concern to ensure that child routes are accessible only
+    # to signed in users.
     # It defines a route to edit the account details and one to sign in and sign out.
     #
     # To enforce being singed in to certain resources:
@@ -35,8 +44,12 @@ module UserPlane
     #
     class Base < AbstractConcern
 
+      def default_sing_in_constraint
+        -> (r) {Session.new(r.session).signed_in?}
+      end
+
       def initialize(defaults = nil)
-        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| 'SignedInConstraint'}
+        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| default_sing_in_constraint}
         super defaults
       end
 
@@ -68,7 +81,7 @@ module UserPlane
     class Invites < AbstractConcern
       def build(mapper, options)
         mapper.resources :sign_up, options.call(only: [:edit, :update],
-                                                as: :sign_up_with_invite,
+                                                as: :sign_up_with_invites,
                                                 param: :code)
         mapper.resources :invite, options.call(only: [:new, :create],
                                                as: :send_sign_up_invites,

@@ -1,28 +1,36 @@
+# set_callback :invite_set, :after, :set_email_from_invite
 module User
   class SignUpWithInvite < SignUp
+    attribute :invite
+    attr_accessor :invite_code
 
-    attr_accessor :code
-    attribute :sign_up_invite
-    validates :sign_up_invite, presence: true,
-                               receiver: {map_attributes: {created_at: :code,
-                                                           base:       :code,
-                                                           spent_at:   :code}}
+    define_callbacks :invite_set
 
+    validates :invite, receiver: {map_attributes: {created_at: :code,
+                                                   base:       :code,
+                                                   spent:      :code}}
 
-    def code= code
-      @code = code
-      @sign_up_invite = SignUpInvites::Invite.find_by_code(code) or nil
-      # TODO: set the email using the invite?
+    validate do |record|
+      # Enforces the need of an invite if the account does not exist
+      if record.account.new_record?
+        record.errors.add_on_blank(:invite) if record.invite.nil?
+      else
+        record.errors.add(:base, :exists)
+      end
     end
 
-    def sign_up_invite invite
-      @sign_up_invite = invite
-      @code = invite.code
+    def invite_code= code
+      self.invite = SignUpInvites::Invite.find_by_code(code)
     end
 
-    def oauth_identity= sign_up_identity
-      super sign_up_identity
-      self.sign_up_invite ||= self.account.invite if self.account
+    def invite= invite
+      @invite_code = invite.code
+      run_callbacks(:invite_set) {@invite = invite}
     end
+
+    before_validation do
+      @account.invite = invite
+    end
+
   end
 end
