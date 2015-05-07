@@ -80,12 +80,14 @@ module UserPlane
     # An alternative to the SignUp concern it provides routes to handle sign up invites
     class Invites < AbstractConcern
       def build(mapper, options)
-        mapper.resources :sign_up, options.call(only: [:edit, :update],
-                                                as: :sign_up_with_invites,
-                                                param: :code)
-        mapper.resources :invite, options.call(only: [:new, :create],
-                                               as: :send_sign_up_invites,
-                                               concern: :signed_in)
+        mapper.resources :sign_ups, options.call(only: [:edit, :update],
+                                                 as: :sign_up_with_invites,
+                                                 controller: :sign_up_with_invites,
+                                                 param: :code,
+                                                 path_names: {edit: 'redeem'})
+        mapper.resources :invites, options.call(only: [:new, :create],
+                                                as: :send_sign_up_invites,
+                                                concern: :signed_in)
       end
     end
 
@@ -102,8 +104,8 @@ module UserPlane
                                                           param: :code)
         end
 
-        mapper.get '/confirm_emails/:code', options.call(to: 'confirm_email_addresses#update',
-                                                         as: :confirm_email_address)
+        mapper.get '/confirm_email/:code', options.call(to: 'confirm_email_addresses#update',
+                                                        as: :confirm_email_addresses)
       end
     end
 

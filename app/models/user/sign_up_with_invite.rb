@@ -2,7 +2,8 @@
 module User
   class SignUpWithInvite < SignUp
     attribute :invite
-    attr_accessor :invite_code
+    attr_accessor :code
+
 
     define_callbacks :invite_set
 
@@ -19,12 +20,20 @@ module User
       end
     end
 
-    def invite_code= code
+    def to_param
+      self.code
+    end
+
+    def persisted?
+      invite && invite.persisted?
+    end
+
+    def code= code
       self.invite = SignUpInvites::Invite.find_by_code(code)
     end
 
     def invite= invite
-      @invite_code = invite.code
+      @code = invite.code
       run_callbacks(:invite_set) {@invite = invite}
     end
 
