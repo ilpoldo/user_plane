@@ -7,9 +7,9 @@ module User
 
     define_callbacks :invite_set
 
-    validates :invite, receiver: {map_attributes: {created_at: :code,
-                                                   base:       :code,
-                                                   spent:      :code}}
+    validates :invite, receiver: {map_attributes: {created_at: :invite,
+                                                   base:       :invite,
+                                                   spent:      :invite}}
 
     validate do |record|
       # Enforces the need of an invite if the account does not exist

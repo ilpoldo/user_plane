@@ -22,18 +22,9 @@ module User
 
     private
       def provider_from_ominauth ominauth_data
-        provider_class = class_from_provider_name(ominauth_data[:provider])
+        provider_class = ('User::Identities::' + ominauth_data[:provider].camelize).constantize
         (current_scope || self).where(provider: provider_class)
       end
-
-      def class_from_provider_name provider_name
-        # TODO: build an unrecognized provider and have it caught by validations
-        if_not_found = -> {raise Exception.new('Unknown oauth provider')}
-        descendants.detect(if_not_found) do |p|
-          p.provider_name == provider_name
-        end
-      end
-
     end
 
     class OAuth < Identity
