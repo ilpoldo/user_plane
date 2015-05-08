@@ -44,12 +44,12 @@ module UserPlane
     #
     class Base < AbstractConcern
 
-      def default_sing_in_constraint
+      def default_sign_in_constraint
         -> (r) {Session.new(r.session).signed_in?}
       end
 
       def initialize(defaults = nil)
-        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| default_sing_in_constraint}
+        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| default_sign_in_constraint}
         super defaults
       end
 

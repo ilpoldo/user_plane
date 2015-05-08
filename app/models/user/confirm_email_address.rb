@@ -15,6 +15,14 @@ module User
     validate {|r| r.errors.add(:code, 'Is not valid') unless r.verification}
     validates :identity, receiver: {map_attributes: {address: :email}}
 
+    def to_param
+      self.code
+    end
+
+    def persisted?
+      verification && verification.persisted?
+    end
+
     # FIXME: a lot of duplication with reset_password
     def code= token
       @code = token

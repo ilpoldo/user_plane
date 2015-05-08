@@ -18,6 +18,14 @@ module User
     validates :identity, receiver: {map_attributes: {password: :password,
                                                      password_confirmation: :password_confirmation}}
 
+    def to_param
+      self.code
+    end
+
+    def persisted?
+      verification && verification.persisted?
+    end
+
     def code= token
       @code = token
 
