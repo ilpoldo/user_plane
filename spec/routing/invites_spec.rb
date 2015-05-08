@@ -2,9 +2,6 @@ require 'spec_helper'
 require 'shared_contexts/user'
 
 describe "routest for Invite" do
-  # TODO: move this somewhere sensible
-  include   Rails.application.routes.url_helpers
-
   include_context 'user'
 
   subject :sign_up_with_invite do

@@ -21,3 +21,5 @@ RSpec.configure do |config|
   config.order = "random"
   config.infer_spec_type_from_file_location!
 end
+
+RSpec::Rails::RoutingExampleGroup.include Rails.application.routes.url_helpers
