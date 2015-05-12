@@ -105,7 +105,7 @@ module UserPlane
         end
 
         mapper.get '/confirm_email/:code', options.call(to: 'confirm_email_addresses#update',
-                                                        as: :confirm_email_addresses)
+                                                        as: :confirm_email_address)
       end
     end
 

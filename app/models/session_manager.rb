@@ -1,4 +1,4 @@
-class Session
+class SessionManager
 
   class << self
     attr_accessor :identity_lifetime
@@ -42,15 +42,18 @@ class Session
   
   # Sets into the session the identity with which the user has logged in.
   def identity=(identity)
+    unless identity.nil?
+      @session[:identity] = {id_token: identity.serialize,
+                             expires_at: SessionManager.identity_lifetime.from_now}
+    else
+      @session[:identity] = nil
+    end
     @identity = identity
-    @session[:identity] = {id_token: identity.serialize,
-                           expires_at: Session.identity_lifetime.from_now}
   end
   
   # Deletes the user login information for the session.
-  def log_out
-    @identity        = nil
-    @session[:identity] = nil
+  def sign_out
+    self.identity = nil
   end
 
   # Retrieves the identity from using the identity id and creation time stored in the session
@@ -83,8 +86,8 @@ private
   # Renews session expiration for the next 45 minutes if the session is still fresh
   def refresh!
     identity = @session[:identity]
-    if signed_in? && identity[:expires_at] < Session.identity_lifetime.from_now 
-      identity[:expires_at] = Session.identity_lifetime.from_now
+    if signed_in? && identity[:expires_at] < SessionManager.identity_lifetime.from_now 
+      identity[:expires_at] = SessionManager.identity_lifetime.from_now
     end
   end
 

@@ -1,4 +1,4 @@
 module UserPlane
-  class SessionsController < UserPlane.parent_controller.constantize
+  class ApplicationController < UserPlane.parent_controller.constantize
   end
 end

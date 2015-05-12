@@ -23,3 +23,4 @@ RSpec.configure do |config|
 end
 
 RSpec::Rails::RoutingExampleGroup.include Rails.application.routes.url_helpers
+Rails.configuration.action_mailer.default_url_options = {host: 'example.com' }

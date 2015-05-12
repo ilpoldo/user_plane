@@ -17,6 +17,12 @@ module UserPlane
       end
     end
 
+    initializer  :'user_plane.controller_concern' do
+      ActiveSupport.on_load(:action_controller) do
+        include SessionManagerConcern
+      end
+    end
+
 
   end
 end

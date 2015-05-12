@@ -38,7 +38,7 @@ module User
     def verification= verification
       @code = verification.token
       @verification = verification
-      @identity = verification.identity
+      @identity = verification.email
     end
 
     before_validation do

@@ -7,10 +7,11 @@ describe User::SignUp do
   context 'with valid details' do
     subject :sign_up do
       p = 'some secret'
-      described_class.new(user_name: 'foo', 
-                          email: 'foo@example.com',
-                          password: p,
-                          password_confirmation: p)        
+      sign_up = described_class.new(user_name: 'foo', 
+                                    email: 'foo@example.com',
+                                    password: p,
+                                    password_confirmation: p)
+      sign_up.sign_up_with(User::Identities::Email)
     end
 
     it {is_expected.to be_valid}
@@ -24,10 +25,11 @@ describe User::SignUp do
   
   context 'with bad details' do   
     subject :new_sign_up do
-      described_class.new(user_name: a_user.name,
-                          email: a_user.email.address,
-                          password: p,
-                          password_confirmation: p)
+      sign_up = described_class.new(user_name: a_user.name,
+                                    email: a_user.email.address,
+                                    password: p,
+                                    password_confirmation: p)
+      sign_up.sign_up_with(User::Identities::Email)
     end
 
     before {new_sign_up.valid?}
@@ -44,12 +46,13 @@ describe User::SignUp do
     context 'can be created logging in with facebook' do
       # User fills up the signup form with his user name and clicks to register with facebook
       subject :sign_up do
-        described_class.new(user_name: Faker::Internet.user_name,
-                         oauth_data: facebook_oauth_data)
+        sign_up = described_class.new(user_name: Faker::Internet.user_name,
+                                      oauth_data: facebook_oauth_data)
+        sign_up.sign_up_with(User::Identities::OAuth)
       end
 
       it {is_expected.to be_valid}      
-      it {expect(sign_up.oauth_identity).to be_a(User::Identities::Facebook)}
+      it {expect(sign_up.identity).to be_a(User::Identities::Facebook)}
     end
   end
 

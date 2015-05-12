@@ -1,5 +1,6 @@
 require 'user_plane/signed_in_constraint'
 require 'user_plane/route_concerns'
+require 'user_plane/session_manager_concern'
 
 require 'user_plane/engine'
 require 'user_plane/token_segment'
@@ -20,6 +21,10 @@ module UserPlane
   end
 
   def self.parent_mailer
-    @@parent_mailer || '::ActionMailer::Base'
+    @@parent_mailer || 'UserPlane::ApplicationMailer'
+  end
+
+  def self.send_emails_from
+    "accounts@#{Rails.configuration.action_mailer.default_url_options[:host]}"
   end
 end

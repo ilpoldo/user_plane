@@ -5,4 +5,6 @@ Fabricator('User::SignUp', aliases: [:user_sign_up]) do
   pw = 'long secret'
   password              pw
   password_confirmation pw
+
+  after_build {|su| su.sign_up_with User::Identities::Email}
 end

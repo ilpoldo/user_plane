@@ -22,16 +22,16 @@ describe User::UpdateDetails do
 
     subject (:update_details) {described_class.new(account: a_user, email: new_address)}
 
-    let! :email_verification_code do
+    let! :email_verification do
       update_details.perform!
-      code = update_details.email_verification_code
+      verification = update_details.email_verification
       a_user.reload
-      code
+      verification
     end
 
 
     it 'updates the address once verified' do
-      User::Identities::Email.verify_address! email_verification_code
+      User::Identities::Email.verify_address! email_verification.token
       a_user.reload
       expect(a_user.email.address).to eql(new_address)
     end
@@ -43,7 +43,7 @@ describe User::UpdateDetails do
     context 'the old login token' do
 
       it 'expires when the address is confirmed' do
-        User::Identities::Email.verify_address! email_verification_code
+        User::Identities::Email.verify_address! email_verification.token
         a_user.reload
         expect { User::Identity.deserialize!(old_login_token) }.to raise_error
       end

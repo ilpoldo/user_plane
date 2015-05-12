@@ -4,7 +4,17 @@ module User
     # The class methods have been moved into a separate module so that they
     # could be added as association extensions if necessary.
     module OauthBuildCreateAndFind
-      attr_accessor :provider_name
+
+      def find_identity sign_in
+        find_from_omniauth(sign_in[:oauth_data])
+      end
+
+      def build_identity sign_up
+        identity = initialize_from_omniauth(sign_up[:oauth_data])
+        sign_up.account.oauth_identities << identity
+
+        identity
+      end
 
       def initialize_from_omniauth ominauth_data
         identity_provider = provider_from_ominauth(ominauth_data)
@@ -16,13 +26,13 @@ module User
         identity_provider.find_by(uid: ominauth_data['uid'])
       end
 
-      def find_or_initialize_from_omniauth ominauth_data
+      def find_or_build_from_omniauth ominauth_data
         find_from_omniauth(ominauth_data) || initialize_from_omniauth(ominauth_data)
       end
 
     private
       def provider_from_ominauth ominauth_data
-        provider_class = ('User::Identities::' + ominauth_data[:provider].camelize).constantize
+        provider_class = User::Identities.const_get(ominauth_data[:provider].camelize)
         (current_scope || self).where(provider: provider_class)
       end
     end

@@ -51,8 +51,8 @@ module User
       end
     end
 
-    def email_verification_code
-      email_identity.address_change_verification.token if email_identity.unverified_address_changed?
+    def email_verification
+      email_identity.address_change_verification if email_identity.unverified_address_changed?
     end
 
     # Returns ture if a new password was set, but the change was rejected.

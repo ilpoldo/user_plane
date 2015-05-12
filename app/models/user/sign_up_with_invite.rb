@@ -11,12 +11,12 @@ module User
                                                    base:       :invite,
                                                    spent:      :invite}}
 
-    validate do |record|
+    validate do |command|
       # Enforces the need of an invite if the account does not exist
-      if record.account.new_record?
-        record.errors.add_on_blank(:invite) if record.invite.nil?
+      if command.account.new_record?
+        command.errors.add_on_blank(:invite) if command.invite.nil?
       else
-        record.errors.add(:base, :exists)
+        command.errors.add(:base, :exists)
       end
     end
 
@@ -38,7 +38,7 @@ module User
     end
 
     before_validation do
-      @account.invite = invite
+      account.invite = invite
     end
 
   end

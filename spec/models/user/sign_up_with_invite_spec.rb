@@ -6,10 +6,10 @@ describe User::SignUpWithInvite do
 
   context 'without an invite' do
     subject :sign_up_without_invite do
-      described_class.new(user_name: invite_recipient_user_name,
-                          email: Faker::Internet.safe_email,
-                          password: new_password,
-                          password_confirmation: new_password)
+      sign_up = described_class.new(user_name: invite_recipient_user_name,
+                                    email: Faker::Internet.safe_email,
+                                    password: new_password,
+                                    password_confirmation: new_password)
     end
 
     before {sign_up_without_invite.valid?}
@@ -26,11 +26,12 @@ describe User::SignUpWithInvite do
 
     subject :sign_up_with_spent_invite do
       user_name = Faker::Internet.user_name
-      described_class.new(user_name: user_name,
-                          code: spent_invite.code,
-                          email: "#{user_name}@example.com",
-                          password: new_password,
-                          password_confirmation: new_password)
+      sign_up = described_class.new(user_name: user_name,
+                                    code: spent_invite.code,
+                                    email: "#{user_name}@example.com",
+                                    password: new_password,
+                                    password_confirmation: new_password)
+      sign_up.sign_up_with(User::Identities::Email)
     end
 
     before {sign_up_with_spent_invite.valid?}
@@ -41,11 +42,12 @@ describe User::SignUpWithInvite do
 
   context 'with an invite' do
     subject :sign_up_with_invite do
-      described_class.new(user_name: invite_recipient,
-                          code: a_sign_up_invite.code,
-                          email: a_sign_up_invite.recipient,
-                          password: new_password,
-                          password_confirmation: new_password)
+      sign_up = described_class.new(user_name: invite_recipient,
+                                    code: a_sign_up_invite.code,
+                                    email: a_sign_up_invite.recipient,
+                                    password: new_password,
+                                    password_confirmation: new_password)
+      sign_up.sign_up_with(User::Identities::Email)
     end
 
     it {expect { sign_up_with_invite.perform! }.to_not raise_error}
@@ -54,11 +56,12 @@ describe User::SignUpWithInvite do
 
   context 'when redeemed' do
     subject :sign_up_with_invite do
-      described_class.new(user_name: invite_recipient,
-                          code: a_sign_up_invite.code,
-                          email: a_sign_up_invite.recipient,
-                          password: new_password,
-                          password_confirmation: new_password)
+      sign_up = described_class.new(user_name: invite_recipient,
+                                    code: a_sign_up_invite.code,
+                                    email: a_sign_up_invite.recipient,
+                                    password: new_password,
+                                    password_confirmation: new_password)
+      sign_up.sign_up_with(User::Identities::Email)
     end
 
     before {sign_up_with_invite.perform!}
@@ -70,9 +73,10 @@ describe User::SignUpWithInvite do
     # User fills up the signup form with his user name and clicks to register with facebook
     sign_up = described_class.new(code: a_sign_up_invite.code,
                                   oauth_data: facebook_oauth_data)
+    sign_up.sign_up_with(User::Identities::OAuth)
 
     expect(sign_up).to be_valid
-    expect(sign_up.oauth_identity).to be_a(User::Identities::Facebook)
+    expect(sign_up.identity).to be_a(User::Identities::Facebook)
     sign_up.perform
   end
 
