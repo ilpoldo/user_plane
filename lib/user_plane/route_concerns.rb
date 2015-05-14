@@ -4,6 +4,9 @@ module UserPlane
     DEFAULTS = {namespace: 'user', on: :collection}
 
     class AbstractConcern
+      attr_accessor :concern_options
+      attr_accessor :mapper
+
       def initialize(defaults = nil)
         defaults ||= RouteConcerns::DEFAULTS
         @namespace = defaults[:namespace]
@@ -12,16 +15,33 @@ module UserPlane
 
       # The abstract concern should be able to handle resources having a preferred
       # collection/resource target.
-      def call(mapper, options = {})
+      def call(mapper, concern_options = {})
+        @mapper = mapper
+        @concern_options = concern_options
+
+        build
+      end
+
+      def options custom_route_options={}
         resource_scope = mapper.send :resource_scope?
+
         if resource_scope
-          options_factory = lambda { |o| @defaults.merge(options).merge(o) }
+          @defaults.merge(@concern_options).merge(custom_route_options)
         else
-          options_factory = lambda { |o| @defaults.merge(options).merge(o).except(:on) }
+          @defaults.merge(@concern_options).merge(custom_route_options).except(:on)
         end
+      end
+    end
+
+    class AbstractNamespacedConcern < AbstractConcern
+      # The abstract concern should be able to handle resources having a preferred
+      # collection/resource target.
+      def call(mapper, concern_options = {})
+        @mapper = mapper
+        @concern_options = concern_options
 
         mapper.namespace @namespace, path: '/' do
-          build(mapper, options_factory)
+          build
         end
       end
     end
@@ -42,7 +62,7 @@ module UserPlane
     #   resource :buddies
     # end
     #
-    class Base < AbstractConcern
+    class Base < AbstractNamespacedConcern
 
       def default_sign_in_constraint
         -> (r) {Session.new(r.session).signed_in?}
@@ -57,55 +77,77 @@ module UserPlane
         @sign_in_constraint.constantize
       end
 
-      def build(mapper, options)
+      def build
         mapper.concern :signed_in do
           scope constraint: sign_in_constraint.new() {yield}
         end
 
-        mapper.resource :session, options.call(only: [:new, :create, :destroy])
+        mapper.concern :auth_callback, OAuthCallback.new()
 
-        mapper.resource :details, options.call(only: [:edit, :update],
-                                               as: :update_details,
-                                               on: :member,
-                                               concern: :signed_in)
+        mapper.resource :session, options(only: [:new, :create, :destroy])
+
+        mapper.resource :details, options(only: [:edit, :update],
+                                          as: :update_details,
+                                          on: :member,
+                                          concern: :signed_in)
       end
     end
 
-    class SignUp < AbstractConcern
-      def build(mapper, options)
-        mapper.resource :sign_up, options.call(only: [:new, :create])
+    class SignUp < AbstractNamespacedConcern
+      def build
+        mapper.resource :sign_up, options(only: [:new, :create]) do
+          mapper.concerns :auth_callback, controller: :sign_up
+        end
       end
     end
 
     # An alternative to the SignUp concern it provides routes to handle sign up invites
-    class Invites < AbstractConcern
-      def build(mapper, options)
-        mapper.resources :sign_ups, options.call(only: [:edit, :update],
-                                                 as: :sign_up_with_invites,
-                                                 controller: :sign_up_with_invites,
-                                                 param: :code,
-                                                 path_names: {edit: 'redeem'})
-        mapper.resources :invites, options.call(only: [:new, :create],
-                                                as: :send_sign_up_invites,
-                                                concern: :signed_in)
+    class Invites < AbstractNamespacedConcern
+      def build
+        sign_up_options = options(only: [:edit, :update],
+                                  path_names: {edit: 'redeem'},
+                                  as: :sign_up_with_invites,
+                                  param: :code)
+        
+        mapper.resources :invites,  sign_up_options do
+          mapper.concerns :auth_callback, controller: :invites
+        end
+        
+        mapper.resources :invites, options(only: [:new, :create],
+                                           as: :send_sign_up_invites,
+                                           concern: :signed_in)
       end
     end
 
     # Provides extra routes to manage email identities: password resets and email
     # confirmations
-    class EmailIdentity < AbstractConcern
-      def build(mapper, options)
+    class EmailIdentity < AbstractNamespacedConcern
+      def build
         mapper.scope controller: :reset_passwords do
-          mapper.resources :reset_passwords, options.call(only: [:new, :create],
-                                                          param: :code,
-                                                          as: :send_password_resets)
+          mapper.resources :reset_passwords, options(only: [:new, :create],
+                                                     param: :code,
+                                                     as: :send_password_resets)
 
-          mapper.resources :reset_passwords, options.call(only: [:edit, :update],
-                                                          param: :code)
+          mapper.resources :reset_passwords, options(only: [:edit, :update],
+                                                     param: :code)
         end
 
-        mapper.get '/confirm_email/:code', options.call(to: 'confirm_email_addresses#update',
-                                                        as: :confirm_email_address)
+        mapper.get '/confirm_email/:code', options(to: 'confirm_email_addresses#update',
+                                                   as: :confirm_email_address)
+      end
+    end
+
+    class OAuthCallback < AbstractConcern
+
+      def build
+        controller = concern_options.delete(:controller) || 'sessions'
+
+        mapper.resources :auth, options(as: :o_auth_callback,
+                                        only: :edit,
+                                        path_names: {edit: 'callback'},
+                                        param: :provider,
+                                        on: :member,
+                                        to: "#{controller}#oauth_callback")
       end
     end
 

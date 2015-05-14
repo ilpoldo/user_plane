@@ -1,0 +1,4 @@
+Hi <%= @confirm_email_address.identity.account.name %>,
+  please follow the link below to validate this address.
+
+<%= polymorphic_url(@confirm_email_address) %> 

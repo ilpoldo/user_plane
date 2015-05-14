@@ -9,7 +9,7 @@ describe User::SendPasswordReset, type: :model do
   end
 
   context 'resetting the password for an existing account' do
-    subject(:send_reset) {described_class.new(recipient: a_user.email.address)}
+    subject(:send_reset) {described_class.new(email: a_user.email.address)}
 
     it 'has a verification code' do
       send_reset.perform!
@@ -27,7 +27,7 @@ describe User::SendPasswordReset, type: :model do
       allow(User::Identities::Email).to receive(:find_by).and_return(nil)
     end
 
-    subject(:send_reset) {described_class.new(recipient: a_user.email.address)}
+    subject(:send_reset) {described_class.new(email: a_user.email.address)}
 
     it {is_expected.to be_valid}
 

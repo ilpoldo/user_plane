@@ -4,7 +4,7 @@ module User
     attr_accessor :code
     attr_accessor :identity
 
-    def recipient= address
+    def email= address
       @identity = User::Identities::Email.find_by(address: address)
     end
 

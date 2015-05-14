@@ -12,13 +12,16 @@ Rails.application.routes.draw do
   #   concerns :email_identity      
   # end
 
-  # Alternatively as a simple scope
-  concerns :sign_up
   
   scope '/account' do
     concerns :base
     concerns :email_identity
   end
+
+  # Alternatively as a simple scope
+  concerns :sign_up
+
+  root 'welcome#index'
 
   # scope '/foo' do
   #   namespace 'user', path: '/' do

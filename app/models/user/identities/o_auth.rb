@@ -50,6 +50,10 @@ module User
       validates :uid, presence: true,
                       uniqueness: {scope: :provider}
 
+      def self.callback
+        OAuthCallback.new(self.name.underscore.to_sym)
+      end
+
       before_validation do
         self.build_id_token
       end
