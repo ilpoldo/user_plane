@@ -18,14 +18,14 @@ module User
     end
 
     def edit
-      @sign_up = SignUpWithInvite.new(code: params[:code])
-      @sign_up.email = @sign_up.invite.recipient
+      @sign_up_with_invite = SignUpWithInvite.new(code: params[:code])
+      @sign_up_with_invite.email = @sign_up_with_invite.invite.recipient
     end
 
     def update
-      @sign_up = SignUpWithInvite.new(sign_up_params).sign_up_with(Identities::Email)
+      @sign_up_with_invite = SignUpWithInvite.new(sign_up_params).sign_up_with(Identities::Email)
 
-      perform_sign_up @sign_up
+      perform_sign_up @sign_up_with_invite
     end
 
     def oauth_callback
@@ -36,16 +36,16 @@ module User
                       user_name: params[:user_name],
                       code: params[:code]}
       # TODO: The host app should be able to do a sign_up here instead 
-      @sign_up = SignUpWithInvite.new(oauth_data: oauth_data).sign_in_with(Identities::OAuth)
+      @sign_up_with_invite = SignUpWithInvite.new(oauth_data: oauth_data).sign_in_with(Identities::OAuth)
 
-      perform_sign_up @sign_up
+      perform_sign_up @sign_up_with_invite
     end
 
 
   private
 
     def sign_up_params
-      params.require(:sign_up).
+      params.require(:sign_up_with_invite).
              permit(:email, :password, :password_confirmation, :user_name, :code)
     end
 
