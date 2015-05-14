@@ -67,7 +67,7 @@ class SessionManager
   end
 
   # Retrieves the user account from the database through an identity.
-  def user
+  def account
     identity ? identity.account : User::Guest.find_or_create_from_session(@session)
   end
 

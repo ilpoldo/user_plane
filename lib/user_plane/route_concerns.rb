@@ -13,6 +13,11 @@ module UserPlane
         @defaults = defaults.except(:namespace)
       end
 
+      # Returns true if a particular concern exists
+      def exists? concern 
+        mapper.instance_variable_get('@concerns').include?(concern)
+      end
+
       # The abstract concern should be able to handle resources having a preferred
       # collection/resource target.
       def call(mapper, concern_options = {})
@@ -82,9 +87,11 @@ module UserPlane
           scope constraint: sign_in_constraint.new() {yield}
         end
 
-        mapper.concern :auth_callback, OAuthCallback.new()
-
-        mapper.resource :session, options(only: [:new, :create, :destroy])
+        mapper.resource :session, options(only: [:new, :create, :destroy]) do
+          if exists? :auth_callback
+            mapper.concerns :auth_callback, controller: :sessions
+          end
+        end
 
         mapper.resource :details, options(only: [:edit, :update],
                                           as: :update_details,
@@ -96,12 +103,15 @@ module UserPlane
     class SignUp < AbstractNamespacedConcern
       def build
         mapper.resource :sign_up, options(only: [:new, :create]) do
-          mapper.concerns :auth_callback, controller: :sign_up
+          if exists? :auth_callback
+            mapper.concerns :auth_callback, controller: :sign_up
+          end
         end
       end
     end
 
-    # An alternative to the SignUp concern it provides routes to handle sign up invites
+    # An alternative to the SignUp concern that provides routes to handle sign
+    # up via invites.
     class Invites < AbstractNamespacedConcern
       def build
         sign_up_options = options(only: [:edit, :update],
@@ -110,7 +120,9 @@ module UserPlane
                                   param: :code)
         
         mapper.resources :invites,  sign_up_options do
-          mapper.concerns :auth_callback, controller: :invites
+          if exists? :auth_callback
+            mapper.concerns :auth_callback, controller: :invites
+          end
         end
         
         mapper.resources :invites, options(only: [:new, :create],

@@ -10,7 +10,7 @@ describe SessionManager do
       session_hash = session_manager.instance_variable_get '@session'
       new_session = SessionManager.new(session_hash)
       expect(new_session.identity).to eql(account.identities.first)
-      expect(new_session.user).to eql(account)
+      expect(new_session.account).to eql(account)
     end
 
 
@@ -20,7 +20,7 @@ describe SessionManager do
 
       Timecop.travel(90.minutes.from_now) do
         expect(new_session_manager.identity).to be_nil
-        expect(new_session_manager.user).to be_a(User::Guest)
+        expect(new_session_manager.account).to be_a(User::Guest)
       end
     end
 
