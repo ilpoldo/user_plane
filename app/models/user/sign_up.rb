@@ -1,5 +1,5 @@
 module User
-  class SignUp < Imperator::Command
+  class SignUp < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     attribute :user_name

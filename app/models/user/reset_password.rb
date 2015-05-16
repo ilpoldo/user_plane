@@ -1,5 +1,5 @@
 module User
-  class ResetPassword < Imperator::Command
+  class ResetPassword < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     attribute :password

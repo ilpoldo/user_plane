@@ -1,5 +1,5 @@
 module User
-  class SendSignUpInvite < Imperator::Command
+  class SendSignUpInvite < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     attribute :recipient

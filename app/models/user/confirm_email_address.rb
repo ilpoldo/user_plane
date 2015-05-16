@@ -1,5 +1,5 @@
 module User
-  class ConfirmEmailAddress < Imperator::Command
+  class ConfirmEmailAddress < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     attr_accessor :verification

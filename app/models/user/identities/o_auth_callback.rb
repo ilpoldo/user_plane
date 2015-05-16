@@ -12,6 +12,14 @@ module User::Identities
       provider
     end
 
+    def to_model
+      self
+    end
+
+    def persisted?
+      true
+    end
+
     def self.model_name
       ActiveModel::Name.new(self, nil, "OAuthCallback")
     end

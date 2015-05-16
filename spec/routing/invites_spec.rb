@@ -15,6 +15,9 @@ describe "routest for Invite" do
 
   it "routes oauth invites" do
     path = polymorphic_path([:edit, sign_up_with_invite, User::Identities::OAuthCallback.new(:facebook)])
-    expect(get: path).to route_to("user/invites#oauth_callback", sign_up_with_invite_code: a_sign_up_invite.code, provider: 'facebook')
+    expect(get: path).to route_to("user/invites#oauth_callback",
+                                  sign_up_with_invite_code: a_sign_up_invite.code,
+                                  provider: 'facebook',
+                                  on: :member)
   end
 end

@@ -1,5 +1,5 @@
 module User
-  class UpdateDetails < Imperator::Command
+  class UpdateDetails < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     PasswordDetails = Struct.new(:current_password, :password, :password_confirmation) do

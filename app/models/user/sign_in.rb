@@ -1,5 +1,5 @@
 module User
-  class SignIn < Imperator::Command
+  class SignIn < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
     attribute :email
@@ -9,8 +9,8 @@ module User
 
     attribute :identity
 
-    validate :identity, presence: {message: :invalid}
-    validate :ominauth_error, absence: true
+    validates :identity, presence: {message: :invalid}
+    validates :ominauth_error, absence: true
 
 
     validate do |command|

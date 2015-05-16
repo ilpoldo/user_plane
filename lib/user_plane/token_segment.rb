@@ -9,7 +9,7 @@ module TokenSegment
       # Generates a random token on a given attirubte at creation time.
       # optionally it can create it for every update of the record.
 
-      validate attribute, uniqueness: true
+      validates attribute, uniqueness: true
 
       if life_span = options[:expires_in]
         scope :stale, -> {unscoped.where('created_at <= ?', life_span.ago)}

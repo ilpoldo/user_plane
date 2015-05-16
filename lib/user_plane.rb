@@ -8,9 +8,10 @@ require 'user_plane/fresh_validator'
 
 require 'email_validator/strict'
 
-require 'imperator'
+require 'user_plane/command'
 require 'support_segment'
 require 'support_segment/sti_helpers'
+
 
 module UserPlane
   mattr_accessor :parent_controller

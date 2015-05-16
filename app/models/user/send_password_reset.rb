@@ -1,5 +1,5 @@
 module User
-  class SendPasswordReset < Imperator::Command
+  class SendPasswordReset < UserPlane::Command
     attribute :recipient
     attr_accessor :code
     attr_accessor :identity
