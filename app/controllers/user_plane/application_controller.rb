@@ -1,4 +1,5 @@
 module UserPlane
-  class ApplicationController < ActionController::Base
+  class ApplicationController < UserPlane.parent_controller.constantize
+    include UserPlane::SessionManagerConcern
   end
 end
