@@ -69,22 +69,20 @@ module UserPlane
     #
     class Base < AbstractNamespacedConcern
 
-      def default_sign_in_constraint
-        -> (r) {Session.new(r.session).signed_in?}
+      attr_accessor :singed_in_constraint
+
+      def default_signed_in_constraint
+        -> (r) {binding.pry; SessionManager.new(r.session).signed_in?}
       end
 
       def initialize(defaults = nil)
-        @signed_in_constraint = Hash(defaults).delete(:sign_in_constraint) {|k| default_sign_in_constraint}
+        @signed_in_constraint = Hash(defaults).delete(:signed_in_constraint) {|k| default_signed_in_constraint}
         super defaults
-      end
-
-      def singed_in_constraint
-        @sign_in_constraint.constantize
       end
 
       def build
         mapper.concern :signed_in do
-          scope constraint: sign_in_constraint.new() {yield}
+          scope constraint: @singed_in_constraint
         end
 
         mapper.resource :session, options(only: [:new, :create, :destroy]) do

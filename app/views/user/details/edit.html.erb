@@ -1,8 +1,8 @@
 <%= form_for @update_details do |f| %>
-  <%= f.input :user_name %>
-  <%= f.input :email %>
-  <%= f.input :current_password %>
-  <%= f.input :password %>
-  <%= f.input :password_confirmation %>
+  <%= f.text_field :user_name %>
+  <%= f.text_field :email %>
+  <%= f.password_field :current_password %>
+  <%= f.password_field :password %>
+  <%= f.password_field :password_confirmation %>
   <%= f.submit %>
 <% end %>

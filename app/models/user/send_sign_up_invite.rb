@@ -16,6 +16,10 @@ module User
       @invite ||= stack.invites.build(recipient: recipient, sender: sender)
     end
 
+    def persisited?
+      invite ? invite.persisted? : false
+    end
+
     action do
       invite.save
     end

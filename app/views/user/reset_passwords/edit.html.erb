@@ -1,5 +1,5 @@
 <%= form_for @reset_password do |f| %>
-  <%= f.input :password %>
-  <%= f.input :password_confirmation %>
+  <%= f.password_field :password %>
+  <%= f.password_field :password_confirmation %>
   <%= f.submit %>
 <% end %>
