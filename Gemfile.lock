@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    user_plane (0.0.2)
+    user_plane (0.0.3)
       bcrypt
       email_validator
       imperator
@@ -107,6 +107,9 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.8)
     formatador (0.2.5)
+    generator_spec (0.9.3)
+      activesupport (>= 3.0.0)
+      railties (>= 3.0.0)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
     guard (2.12.5)
@@ -309,6 +312,7 @@ DEPENDENCIES
   capybara
   fabrication-rails
   faker
+  generator_spec
   guard-jasmine
   guard-rspec
   pg

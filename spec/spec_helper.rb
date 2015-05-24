@@ -8,6 +8,8 @@ require 'fabrication'
 require 'timecop'
 require 'pry'
 
+require 'generator_spec'
+
 Capybara.javascript_driver = :poltergeist
 
 Rails.backtrace_cleaner.remove_silencers!
