@@ -6,9 +6,7 @@ describe UserPlane::Generators::ViewsGenerator, type: :generator do
 
   before(:each) do
     prepare_destination
-    puts ''
-    puts '*******'
-    puts run_generator
+    run_generator
   end
 
   it "creates a test initializer" do

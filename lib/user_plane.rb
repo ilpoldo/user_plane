@@ -6,7 +6,6 @@ require 'user_plane/engine'
 require 'user_plane/token_segment'
 require 'user_plane/fresh_validator'
 require 'user_plane/generators/views_generator'
-require 'user_plane/generators/view_generator'
 
 require 'email_validator/strict'
 
