@@ -87,7 +87,7 @@ module UserPlane
 
         mapper.resource :sign_in, options(only: [:new, :create, :destroy]) do
           if exists? :auth_callback
-            mapper.concerns :auth_callback, controller: :sessions
+            mapper.concerns :auth_callback, controller: :sign_in
           end
         end
 
