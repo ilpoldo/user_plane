@@ -1,3 +1,5 @@
+require 'user_plane/generators'
+
 module UserPlane
   class Engine < ::Rails::Engine
     isolate_namespace UserPlane
