@@ -72,7 +72,7 @@ module UserPlane
       attr_accessor :singed_in_constraint
 
       def default_signed_in_constraint
-        -> (r) {binding.pry; SessionManager.new(r.session).signed_in?}
+        -> (r) {SessionManager.new(r.session).signed_in?}
       end
 
       def initialize(defaults = nil)

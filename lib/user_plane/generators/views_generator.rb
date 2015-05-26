@@ -1,5 +1,5 @@
 require 'rails/generators'
-require 'user_plane/generators/view/sessions_generator'
+require 'user_plane/generators/view/sign_ins_generator'
 require 'user_plane/generators/view/details_generator'
 require 'user_plane/generators/view/sign_ups_generator'
 require 'user_plane/generators/view/reset_passwords_generator'
