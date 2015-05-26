@@ -1,5 +1,25 @@
-<%= form_for @reset_password do |f| %>
-  <%= f.password_field :password %>
-  <%= f.password_field :password_confirmation %>
-  <%= f.submit %>
+<%= form_for(@send_password_reset) do |f| %>
+  <% if @send_password_reset.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@send_password_reset.errors.count, "error") %> prohibited this send_password_reset from being saved:</h2>
+
+      <ul>
+      <% @send_password_reset.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.text_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation %><br>
+    <%= f.text_field :password_confirmation %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
 <% end %>
