@@ -85,7 +85,7 @@ module UserPlane
           scope constraint: @singed_in_constraint
         end
 
-        mapper.resource :session, options(only: [:new, :create, :destroy]) do
+        mapper.resource :sign_in, options(only: [:new, :create, :destroy]) do
           if exists? :auth_callback
             mapper.concerns :auth_callback, controller: :sessions
           end

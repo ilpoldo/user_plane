@@ -1,7 +1,7 @@
 require_dependency "user_plane/application_controller"
 
 module User
-  class SessionsController < ApplicationController
+  class SignInsController < ApplicationController
 
     def new
       @sign_in = SignIn.new()

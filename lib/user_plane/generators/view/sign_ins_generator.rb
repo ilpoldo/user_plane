@@ -3,7 +3,7 @@ require 'user_plane/generators/view/helpers'
 module UserPlane # :nodoc:
   module Generators # :nodoc:
     module View
-      class SessionsGenerator < Rails::Generators::NamedBase # :nodoc:
+      class SignInsGenerator < Rails::Generators::NamedBase # :nodoc:
         include UserPlane::Generators::View::Helpers
 
         def copy_view_files

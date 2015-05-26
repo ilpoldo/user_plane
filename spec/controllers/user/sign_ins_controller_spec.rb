@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_contexts/user'
 
-describe User::SessionsController, type: :controller do
+describe User::SignInsController, type: :controller do
   include_context 'user'
 
   let :session_manager do

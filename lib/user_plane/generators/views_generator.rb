@@ -11,8 +11,8 @@ module UserPlane # :nodoc:
 
       class_option :template_engine, default: 'erb'
       
-      hook_for :'view:sessions', default: true do |invoked|
-        invoke invoked, ['user/sessions']
+      hook_for :'view:sign_ins', default: true do |invoked|
+        invoke invoked, ['user/sign_ins']
       end
 
       hook_for :'view:details', default: true do |invoked|
