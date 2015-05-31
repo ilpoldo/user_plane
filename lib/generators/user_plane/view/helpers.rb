@@ -9,10 +9,9 @@ module UserPlane # :nodoc:
         included do
           include Rails::Generators::ResourceHelpers
           # TODO: move this in classmethods
-          source_root File.expand_path("../../templates", __FILE__)
+          # source_root File.expand_path("../../templates", __FILE__)
           hide!
 
-          class_option :template_engine, default: 'erb'
           class_option :skip_namespace, default: true
 
           hook_for :template_engine, as: :scaffold do |template_engine|

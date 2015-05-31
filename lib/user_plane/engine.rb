@@ -1,11 +1,9 @@
-require 'user_plane/generators'
-
 module UserPlane
   class Engine < ::Rails::Engine
     isolate_namespace UserPlane
 
     config.generators do |g|
-      g.test_framework      :rspec,        :fixture => false
+      g.test_framework      :rspec,       :fixture => false
       g.fixture_replacement :fabrication, :dir => 'spec/fabricators'
       g.assets false
       g.helper false
@@ -24,7 +22,6 @@ module UserPlane
         include SessionManagerConcern
       end
     end
-
 
   end
 end

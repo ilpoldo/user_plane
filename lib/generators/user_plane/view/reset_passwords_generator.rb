@@ -1,4 +1,5 @@
-require 'user_plane/generators/view/helpers'
+require 'rails/generators'
+require 'generators/user_plane/view/helpers'
 
 module UserPlane # :nodoc:
   module Generators # :nodoc:

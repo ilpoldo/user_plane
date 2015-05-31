@@ -1,15 +1,8 @@
 require 'rails/generators'
-require 'user_plane/generators/view/sign_ins_generator'
-require 'user_plane/generators/view/details_generator'
-require 'user_plane/generators/view/sign_ups_generator'
-require 'user_plane/generators/view/reset_passwords_generator'
-require 'user_plane/generators/view/invites_generator'
 
 module UserPlane # :nodoc:
   module Generators # :nodoc:
     class ViewsGenerator < Rails::Generators::Base # :nodoc:
-
-      class_option :template_engine, default: 'erb'
       
       hook_for :'view:sign_ins', default: true do |invoked|
         invoke invoked, ['user/sign_ins']
