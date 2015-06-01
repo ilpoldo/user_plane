@@ -12,12 +12,12 @@ describe User::SignInsController, type: :controller do
   describe "signing in" do
     it "updates the session with the correct credentials" do 
       expect(session_manager).to receive(:identity=).with(a_user.email)
-      post :create, sign_in: {email: a_user.email.address, password: a_user.email.password}
+      post :create, user_sign_in: {email: a_user.email.address, password: a_user.email.password}
     end
 
     it "does not log in with bad credentials" do 
       expect(session_manager).not_to receive(:identity=).with(a_user.email)
-      post :create, sign_in: {email: a_user.email.address, password: 'wrong password'}
+      post :create, user_sign_in: {email: a_user.email.address, password: 'wrong password'}
     end
 
   end

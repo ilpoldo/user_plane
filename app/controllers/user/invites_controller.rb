@@ -45,7 +45,7 @@ module User
   private
 
     def sign_up_params
-      params.require(:sign_up_with_invite).
+      params.require(:user_sign_up_with_invite).
              permit(:email, :password, :password_confirmation, :user_name, :code)
     end
 

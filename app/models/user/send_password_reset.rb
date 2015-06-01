@@ -1,17 +1,22 @@
 module User
   class SendPasswordReset < UserPlane::Command
-    attribute :recipient
+    attribute :email
     attr_accessor :code
     attr_accessor :identity
+    attr_accessor :verification
 
     def email= address
       @identity = User::Identities::Email.find_by(address: address)
     end
 
+    def persisited?
+      verification ? verification.persisted? : false
+    end
+
     action do
       if identity
-        password_reset = identity.reset_password!
-        @code ||= password_reset.token
+        @verification ||= identity.reset_password!
+        @code ||= verification.token
       end
     end
     

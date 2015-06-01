@@ -1,8 +1,8 @@
 require "spec_helper"
+require 'generators/user_plane/views_generator'
 
 describe UserPlane::Generators::ViewsGenerator, type: :generator do
   destination Dir.mktmpdir
-  arguments %w(invites)
 
   before(:each) do
     prepare_destination
@@ -10,7 +10,7 @@ describe UserPlane::Generators::ViewsGenerator, type: :generator do
   end
 
   it "creates a test initializer" do
-    assert_file 'app/views/user/invites/new.html.erb', /render ['"']form/
-    assert_file 'app/views/user/invites/edit.html.erb'
+    assert_file 'app/views/user/invites/new.html.erb', /form_for\(@send_sign_up_invite\)/
+    assert_file 'app/views/user/invites/edit.html.erb', /form_for\(@sign_up_with_invite\)/
   end
 end

@@ -22,6 +22,20 @@ describe User::ResetPassword do
 
     let! (:old_password) {a_user.email.password}
 
+    context 'does not miss validation callbacks' do
+      subject :reset_password do
+        described_class.new(code: reset_token,
+                            password: new_password,
+                            password_confirmation: new_password)
+      end
+      
+      it 'resets the password without skipping the before_validation' do
+        reset_password.perform
+        a_user.reload
+        expect(a_user.email.authenticate(new_password)).not_to be false
+      end
+    end
+
     context 'and a valid password' do
       subject :reset_password do
         described_class.new(code: reset_token,

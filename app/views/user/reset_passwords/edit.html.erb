@@ -1,16 +1,17 @@
-<%= form_for(@send_password_reset) do |f| %>
-  <% if @send_password_reset.errors.any? %>
+<h2>Reset Password</h2>
+<%= form_for(@reset_password) do |f| %>
+  <% if @reset_password.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@send_password_reset.errors.count, "error") %> prohibited this send_password_reset from being saved:</h2>
+      <h2><%= pluralize(@reset_password.errors.count, "error") %> prohibited this reset_password from being saved:</h2>
 
       <ul>
-      <% @send_password_reset.errors.full_messages.each do |message| %>
+      <% @reset_password.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
-
+  <%= f.hidden_field :code %>
   <div class="field">
     <%= f.label :password %><br>
     <%= f.text_field :password %>

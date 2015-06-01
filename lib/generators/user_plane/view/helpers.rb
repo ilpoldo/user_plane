@@ -31,6 +31,11 @@ module UserPlane # :nodoc:
           self.attributes = attributes
           assign_names! name
           parse_attributes!
+          # FIXME: Using the NamesBase generator wrong, should make the views
+          # inherit from Base and implement the same methods used by the
+          # scaffold templates
+          @singular_table_name = name
+          @plural_table_name = name.pluralize
           
           formats.each do |format|
             templatename = filename_with_extensions('_form', format)

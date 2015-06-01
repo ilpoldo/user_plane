@@ -32,6 +32,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-activemodel-mocks'
   s.add_development_dependency 'rspec-collection_matchers'
   s.add_development_dependency 'capybara'
+  s.add_development_dependency 'capybara-email'
+  s.add_development_dependency 'launchy'
   s.add_development_dependency 'poltergeist'
 
   
@@ -49,7 +51,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
   s.add_development_dependency 'pry-doc'
   s.add_development_dependency 'pry-rescue'
-  s.add_development_dependency 'pry-stack_explorer'
+  s.add_development_dependency 'pry-byebug'
 
   s.test_files = Dir["spec/**/*"]
 end

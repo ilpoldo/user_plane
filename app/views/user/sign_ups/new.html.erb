@@ -1,10 +1,10 @@
-<%= form_for(@send_sign_up_invite) do |f| %>
-  <% if @send_sign_up_invite.errors.any? %>
+<%= form_for(@sign_up) do |f| %>
+  <% if @sign_up.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@send_sign_up_invite.errors.count, "error") %> prohibited this send_sign_up_invite from being saved:</h2>
+      <h2><%= pluralize(@sign_up.errors.count, "error") %> prohibited this sign_up from being saved:</h2>
 
       <ul>
-      <% @send_sign_up_invite.errors.full_messages.each do |message| %>
+      <% @sign_up.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

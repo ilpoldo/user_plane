@@ -11,6 +11,7 @@ module UserPlane # :nodoc:
           create_root_folder
           
           view_for_resource :new, 'send_sign_up_invite', ['recipient:string']
+          #TODO: add a hidden field for the invite code
           view_for_resource :edit, 'sign_up_with_invite', ['user_name:string',
                                                            'email:string',
                                                            'password:password',

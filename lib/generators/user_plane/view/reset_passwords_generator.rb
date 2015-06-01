@@ -10,7 +10,8 @@ module UserPlane # :nodoc:
         def copy_view_files
           create_root_folder
           
-          view_for_resource :new, 'send_password_reset', ['recipient:string']
+          view_for_resource :new, 'send_password_reset', ['email:string']
+          #TODO: add a hidden field for the password reset code
           view_for_resource :edit, 'reset_password', ['password:password',
                                                       'password_confirmation:password']
         end

@@ -10,7 +10,6 @@ module UserPlane # :nodoc:
         def copy_view_files
           create_root_folder
           
-          view_for_resource :new, 'send_sign_up_invite', ['recipient:string']
           view_for_resource :new, 'sign_up', ['user_name:string',
                                               'email:string',
                                               'password:password',
