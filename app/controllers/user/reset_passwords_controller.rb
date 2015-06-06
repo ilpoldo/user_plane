@@ -8,12 +8,13 @@ module User
     end
 
     def create
-      @send_password_reset = SendPasswordReset.new(params[:send_password_reset])
+      @send_password_reset = SendPasswordReset.new(send_password_reset_params)
 
       if @send_password_reset.perform
-        reset_mail = UserPlane::VerificationMailer.password_reset(@send_password_reset)
+        reset_password = User::ResetPassword.new(verification: @send_password_reset.verification)
+        reset_mail = UserPlane::VerificationMailer.password_reset(reset_password)
         reset_mail.deliver
-        redirect_too root_url, notice: :reset_sent
+        redirect_to root_url, notice: t('.success')
       else
         render 'new'
       end
@@ -24,14 +25,26 @@ module User
     end
 
     def update
-      @reset_password = ResetPassword.new(params[:reset_password])
-
+      @reset_password = ResetPassword.new(reset_password_params)
+      @reset_password.valid? #FIXME: perform seems to skip the validation callback!
+      # rspec /Users/Le/Code/work/user_plane/spec/models/user/reset_password_spec.rb:32
       if @reset_password.perform
-        redirect_too root_url, notice: :password_reset
+        redirect_to root_url, notice: t('.success')
       else
         render 'edit'
       end
     end
 
+  private
+
+    def reset_password_params
+      params.require(:user_reset_password).
+             permit(:code, :password, :password_confirmation)
+    end
+
+    def send_password_reset_params
+      params.require(:user_send_password_reset).
+             permit(:email)
+    end
   end
 end

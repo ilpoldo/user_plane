@@ -1,0 +1,37 @@
+en:
+  activerecord:
+      attributes:
+        user/send_password_reset: &user_send_password_reset
+          email: "Email"
+  helpers:
+    submit:
+      user_sign_in:
+        create: "Sign In"
+      user_sign_up:
+        create: "Sign Up"
+      user_send_password_reset:
+        create: "Send"
+      user_reset_password:
+        update: "Reset Password"
+      user_send_sign_up_invite:
+        create: "Send"
+      user_sign_up_with_invite:
+        update: "Sign Up"
+      user_update_details:
+        update: "Update"
+    label:
+      user_send_password_reset:
+        <<: *user_send_password_reset
+  user:
+    sign_ins:
+      create:
+        success: "You are successfully signed in."
+      oauth_callback:
+        success: "You are successfully signed in."
+      destroy:
+        success: "You are signed out"
+    reset_passwords:
+      create:
+        success: "Your password reset code is being sent."
+      update:
+        success: "Your password has been reset."

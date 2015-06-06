@@ -1,7 +1,33 @@
-<%= form_for @sign_up_with_invite do |f| %>
-  <%= f.text_field :user_name %>
-  <%= f.text_field :email %>
-  <%= f.password_field :password %>
-  <%= f.password_field :password_confirmation %>
-  <%= f.submit %>
+<%= form_for(@sign_up_with_invite) do |f| %>
+  <% if @sign_up_with_invite.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sign_up_with_invite.errors.count, "error") %> prohibited this sign_up_with_invite from being saved:</h2>
+
+      <ul>
+      <% @sign_up_with_invite.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.hidden_field :code %>
+  <div class="field">
+    <%= f.label :user_name %><br>
+    <%= f.text_field :user_name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.text_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation %><br>
+    <%= f.text_field :password_confirmation %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
 <% end %>

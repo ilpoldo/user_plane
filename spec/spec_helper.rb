@@ -3,10 +3,13 @@ require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
+require 'capybara/email/rspec'
 
 require 'fabrication'
 require 'timecop'
 require 'pry'
+
+require 'generator_spec'
 
 Capybara.javascript_driver = :poltergeist
 

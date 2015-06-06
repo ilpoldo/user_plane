@@ -21,7 +21,7 @@ module User
   private
 
     def update_details_params
-      params.require(:update_details).
+      params.require(:user_update_details).
             permit(:password, :password_confirmation, :email).
             merge(account: session_manager.account)
     end

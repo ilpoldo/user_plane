@@ -72,7 +72,7 @@ module UserPlane
       attr_accessor :singed_in_constraint
 
       def default_signed_in_constraint
-        -> (r) {binding.pry; SessionManager.new(r.session).signed_in?}
+        -> (r) {SessionManager.new(r.session).signed_in?}
       end
 
       def initialize(defaults = nil)
@@ -85,9 +85,9 @@ module UserPlane
           scope constraint: @singed_in_constraint
         end
 
-        mapper.resource :session, options(only: [:new, :create, :destroy]) do
+        mapper.resource :sign_in, options(only: [:new, :create, :destroy]) do
           if exists? :auth_callback
-            mapper.concerns :auth_callback, controller: :sessions
+            mapper.concerns :auth_callback, controller: :sign_in
           end
         end
 

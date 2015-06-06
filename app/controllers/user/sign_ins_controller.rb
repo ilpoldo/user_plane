@@ -1,7 +1,7 @@
 require_dependency "user_plane/application_controller"
 
 module User
-  class SessionsController < ApplicationController
+  class SignInsController < ApplicationController
 
     def new
       @sign_in = SignIn.new()
@@ -26,19 +26,19 @@ module User
 
     def destroy
       session_manager.sign_out
-      redirect_to root_url, notice: :signed_out
+      redirect_to root_url, notice: t('.success')
     end
 
   private
 
     def sign_in_params
-      params.require(:sign_in).permit(:email, :password)
+      params.require(:user_sign_in).permit(:email, :password)
     end
 
     def perform_sign_in sign_in
       if sign_in.perform
         session_manager.identity = sign_in.identity
-        redirect_to root_url, notice: :signed_in
+        redirect_to root_url, notice: t('.success')
       else
         render 'new'
       end      

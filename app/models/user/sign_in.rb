@@ -2,6 +2,8 @@ module User
   class SignIn < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
+    model_name.instance_variable_set(:@route_key, 'user_sign_in')
+
     attribute :email
     attribute :password
     attribute :oauth_data
