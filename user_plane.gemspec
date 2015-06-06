@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Leandro Pedroni"]
   s.email       = ["ilpoldo@gmail.com"]
   s.homepage    = "http://leandropedroni.com/segments"
-  s.summary     = "User component set for Rails applications."
-  s.description = "User component set for Rails applications."
+  s.summary     = "User component for Rails applications."
+  s.description = "User component for Rails applications."
   s.license     = "MIT"
 
   s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.rdoc']
