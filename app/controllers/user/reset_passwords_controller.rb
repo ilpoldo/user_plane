@@ -26,8 +26,6 @@ module User
 
     def update
       @reset_password = ResetPassword.new(reset_password_params)
-      @reset_password.valid? #FIXME: perform seems to skip the validation callback!
-      # rspec /Users/Le/Code/work/user_plane/spec/models/user/reset_password_spec.rb:32
       if @reset_password.perform
         redirect_to root_url, notice: t('.success')
       else

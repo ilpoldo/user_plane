@@ -14,4 +14,14 @@ RSpec.feature "SignIns", type: :feature do
 
     expect(page).to have_text 'You are successfully signed in.'
   end
+
+  scenario 'someone tries to sign in without password' do
+    visit polymorphic_path([User::SignIn.new], action: :new)
+    
+    fill_in 'Email', with: a_user.email.address
+    click_button 'Sign In'
+
+    expect(page).to have_text 'Sign in failed:'
+    expect(page).to have_text 'Invalid email/password combination'
+  end
 end

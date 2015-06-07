@@ -11,14 +11,16 @@ module User
 
     attribute :identity
 
-    validates :identity, presence: {message: :invalid}
     validates :ominauth_error, absence: true
 
 
     validate do |command|
-      identity = command.identity
-      if identity && identity.account.suspensions
-        command.errors.add(:base, :suspended)
+      if identity = command.identity 
+        unless identity.account.suspensions.empty?
+          command.errors.add(:base, :suspended)
+        end
+      else
+        command.errors.add(:base, :invalid)
       end
     end
 

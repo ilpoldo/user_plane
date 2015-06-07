@@ -1,8 +1,15 @@
 en:
-  activerecord:
-      attributes:
-        user/send_password_reset: &user_send_password_reset
-          email: "Email"
+  activemodel:
+    attributes:
+      user/send_password_reset: &user_send_password_reset
+        email: "Email"
+    errors:
+      models:
+        user/sign_in:
+          attributes:
+            base:
+              invalid: "Invalid email/password combination"
+
   helpers:
     submit:
       user_sign_in:
