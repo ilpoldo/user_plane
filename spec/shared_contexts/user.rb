@@ -8,6 +8,14 @@ RSpec.shared_context 'user' do
 
   let(:a_user) {make_singed_up_user}
 
+  def perform_signup_via_oatuh
+    sign_up = Fabricate(:oauth_user_sign_up)
+    sign_up.perform!
+    return sign_up
+  end
+
+  let(:an_oauth_sign_up) {perform_signup_via_oatuh}
+
   let (:new_password) { 'new shiny password' }
 
   let :invite_recipient_user_name do

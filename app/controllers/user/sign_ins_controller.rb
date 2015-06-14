@@ -41,7 +41,7 @@ module User
         redirect_to root_url, notice: t('.success')
       else
         render 'new'
-      end      
+      end
     end
 
   end

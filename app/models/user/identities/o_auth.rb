@@ -23,7 +23,7 @@ module User
 
       def find_from_omniauth ominauth_data
         identity_provider = provider_from_ominauth(ominauth_data)
-        identity_provider.find_by(uid: ominauth_data['uid'])
+        identity_provider.find_by(uid: ominauth_data[:uid])
       end
 
       def find_or_build_from_omniauth ominauth_data
@@ -32,8 +32,7 @@ module User
 
     private
       def provider_from_ominauth ominauth_data
-        provider_class = User::Identities.const_get(ominauth_data[:provider].camelize)
-        (current_scope || self).where(provider: provider_class)
+        User::Identities.const_get(ominauth_data[:provider].camelize)
       end
     end
 

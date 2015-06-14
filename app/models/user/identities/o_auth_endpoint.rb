@@ -1,5 +1,5 @@
 module User::Identities
-  class OAuthCallback
+  class OAuthEndpoint
     extend ActiveModel::Naming
 
     attr_accessor :provider
@@ -21,7 +21,7 @@ module User::Identities
     end
 
     def self.model_name
-      ActiveModel::Name.new(self, nil, "OAuthCallback")
+      ActiveModel::Name.new(self, nil, "OAuthEndpoint")
     end
 
   end

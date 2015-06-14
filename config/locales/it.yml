@@ -1,0 +1,43 @@
+it:
+  activemodel:
+    attributes:
+      user/send_password_reset: &user_send_password_reset
+        email: "Email"
+    errors:
+      models:
+        user/sign_in:
+          attributes:
+            base:
+              invalid: "Combinazione di email/password non valida"
+  helpers:
+    submit:
+      user_sign_in:
+        create: "Accedi"
+      user_sign_up:
+        create: "Registrati"
+      user_send_password_reset:
+        create: "Invia"
+      user_reset_password:
+        update: "Cambia Password"
+      user_send_sign_up_invite:
+        create: "Invia"
+      user_sign_up_with_invite:
+        update: "Registra"
+      user_update_details:
+        update: "Aggiorna"
+    label:
+      user_send_password_reset:
+        <<: *user_send_password_reset
+  user:
+    sign_ins:
+      create:
+        success: "Accesso effettuato."
+      oauth_callback:
+        success: "Accesso effettuato."
+      destroy:
+        success: "Disconnessione effettuata."
+    reset_passwords:
+      create:
+        success: "Il tuo codice per il cambio password sarà inviato."
+      update:
+        success: "La tua password è stata cambiata."

@@ -86,8 +86,8 @@ module UserPlane
         end
 
         mapper.resource :sign_in, options(only: [:new, :create, :destroy]) do
-          if exists? :auth_callback
-            mapper.concerns :auth_callback, controller: :sign_in
+          if exists? :auth_endpoint
+            mapper.concerns :auth_endpoint, controller: :sign_ins
           end
         end
 
@@ -101,8 +101,8 @@ module UserPlane
     class SignUp < AbstractNamespacedConcern
       def build
         mapper.resource :sign_up, options(only: [:new, :create]) do
-          if exists? :auth_callback
-            mapper.concerns :auth_callback, controller: :sign_up
+          if exists? :auth_endpoint
+            mapper.concerns :auth_endpoint, controller: :sign_ups
           end
         end
       end
@@ -118,8 +118,9 @@ module UserPlane
                                   param: :code)
         
         mapper.resources :invites,  sign_up_options do
-          if exists? :auth_callback
-            mapper.concerns :auth_callback, controller: :invites
+          if exists? :auth_endpoint
+            mapper.concerns :auth_endpoint, controller: :invites,
+                                            on: :member
           end
         end
         
@@ -147,17 +148,20 @@ module UserPlane
       end
     end
 
-    class OAuthCallback < AbstractConcern
+    class OAuthEndpoint < AbstractConcern
 
       def build
         controller = concern_options.delete(:controller) || 'sessions'
 
-        mapper.resources :auth, options(as: :o_auth_callback,
+        mapper.resources :auth, options(as: :o_auth_endpoint,
                                         only: :edit,
                                         path_names: {edit: 'callback'},
                                         param: :provider,
-                                        on: :member,
                                         to: "#{controller}#oauth_callback")
+        mapper.resources :auth, options(as: :o_auth_endpoint,
+                                        only: :show,
+                                        param: :provider,
+                                        to: "#{controller}#oauth_request")
       end
     end
 

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   concern :base, UserPlane::RouteConcerns::Base.new()
   concern :sign_up, UserPlane::RouteConcerns::Invites.new()
   concern :email_identity, UserPlane::RouteConcerns::EmailIdentity.new()
-  concern :auth_callback, UserPlane::RouteConcerns::OAuthCallback.new()
+  concern :auth_endpoint, UserPlane::RouteConcerns::OAuthEndpoint.new()
 
   # Users as a resource
   # The User class is a profile class that belongs to the account

@@ -15,6 +15,14 @@ RSpec.feature "SignIns", type: :feature do
     expect(page).to have_text 'You are successfully signed in.'
   end
 
+  scenario 'a user signs in with oauth' do
+    endpoint = User::Identities::OAuthEndpoint.new(:facebook)
+    OmniAuth.config.mock_auth[:facebook] = an_oauth_sign_up.oauth_data
+
+    visit polymorphic_path([:user_sign_in, endpoint])
+    expect(page).to have_text 'You are successfully signed in.'
+  end
+
   scenario 'someone tries to sign in without password' do
     visit polymorphic_path([User::SignIn.new], action: :new)
     
