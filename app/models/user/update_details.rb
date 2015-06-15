@@ -10,9 +10,9 @@ module User
 
     attribute :account
 
-    delegate :password, :password=, to: :password_details
-    delegate :password_confirmation, :password_confirmation=, to: :password_details
-    delegate :current_password, :current_password=, to: :password_details
+    %w(password password_confirmation current_password).each do |attribute|
+      delegate attribute.to_sym, "#{attribute}=".to_sym, to: :password_details
+    end
 
     validates :email_identity, receiver: {map_attributes: {address:  :email,
                                                            password: :password,

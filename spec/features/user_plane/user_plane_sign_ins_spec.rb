@@ -30,6 +30,15 @@ RSpec.feature "SignIns", type: :feature do
     click_button 'Sign In'
 
     expect(page).to have_text 'Sign in failed:'
-    expect(page).to have_text 'Invalid email/password combination'
+    expect(page).to have_text 'Unknown email/password combination'
+  end
+
+  scenario 'Unregistered user signs in with facebook before signing up' do
+    endpoint = User::Identities::OAuthEndpoint.new(:facebook)
+    OmniAuth.config.mock_auth[:facebook] = facebook_oauth_data
+
+    visit polymorphic_path([:user_sign_in, endpoint])
+    expect(page).to have_text 'Sign in failed:'
+    expect(page).to have_text 'Unknown account'
   end
 end

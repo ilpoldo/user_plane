@@ -1,14 +1,15 @@
 en:
   activemodel:
     attributes:
-      user/send_password_reset: &user_send_password_reset
+      user/send_password_reset: &user_send_password_reset_attributes
         email: "Email"
     errors:
       models:
         user/sign_in:
           attributes:
             base:
-              invalid: "Invalid email/password combination"
+              unknown_user_identities_email: "Unknown email/password combination."
+              unknown_user_identities_o_auth: "Unknown account, please sign up."
 
   helpers:
     submit:
@@ -16,6 +17,7 @@ en:
         create: "Sign In"
       user_sign_up:
         create: "Sign Up"
+        create_with_facebook: "Sign Up with Facebook"
       user_send_password_reset:
         create: "Send"
       user_reset_password:
@@ -24,11 +26,12 @@ en:
         create: "Send"
       user_sign_up_with_invite:
         update: "Sign Up"
+        update_with_facebook: "Sign Up with Facebook"
       user_update_details:
         update: "Update"
     label:
       user_send_password_reset:
-        <<: *user_send_password_reset
+        <<: *user_send_password_reset_attributes
   user:
     sign_ins:
       create:
@@ -37,6 +40,18 @@ en:
         success: "You are successfully signed in."
       destroy:
         success: "You are signed out"
+    sign_ups:
+      create:
+        success: "Welcome, you are successfully signed up."
+      oauth_callback:
+        success: "Welcome, you are successfully signed up."
+    invites:
+      create:
+        success: "Invite sent."
+      update:
+        success: "Welcome, you are successfully signed up."
+      oauth_callback:
+        success: "Welcome, you are successfully signed up."
     reset_passwords:
       create:
         success: "Your password reset code is being sent."

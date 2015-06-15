@@ -22,6 +22,14 @@ describe "routest for Invite" do
                                     provider: 'facebook',
                                     on: :member)
     end
+
+    it "can be routed with the oauth request path" do
+      path = polymorphic_path([sign_up_with_invite, User::Identities::OAuthEndpoint.new(:facebook)])
+      expect(get: path).to route_to("user/invites#oauth_request",
+                                    sign_up_with_invite_code: a_sign_up_invite.code,
+                                    provider: 'facebook',
+                                    on: :member)
+    end
   end
 
   context 'creating' do

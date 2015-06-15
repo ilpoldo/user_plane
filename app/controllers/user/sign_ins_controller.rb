@@ -17,9 +17,11 @@ module User
       # TODO: do I need to check the provider param? There is on in oauth_data
       # and one in params.
       oauth_data = request.env["omniauth.auth"]
+      oauth_error = request.env["omniauth.error"]
 
       # TODO: The host app should be able to do a sign_up here instead 
-      @sign_in = SignIn.new(oauth_data: oauth_data).sign_in_with(Identities::OAuth)
+      @sign_in = SignIn.new(oauth_data: oauth_data,
+                            oauth_error: oauth_error).sign_in_with(Identities::OAuth)
 
       perform_sign_in @sign_in
     end

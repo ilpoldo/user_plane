@@ -32,11 +32,12 @@ module User
       # TODO: do I need to check the provider param? There is on in oauth_data
       # and one in params.
       oauth_data = request.env["omniauth.auth"]
+      #FIXME: the way the user_name is inferred might work for facebook only
       oauth_params = {oauth_data: oauth_data,
-                      user_name: params[:user_name],
-                      code: params[:code]}
+                      user_name: oauth_data[:info][:nickname],
+                      code: params[:sign_up_with_invite_code]}
       # TODO: The host app should be able to do a sign_up here instead 
-      @sign_up_with_invite = SignUpWithInvite.new(oauth_data: oauth_data).sign_in_with(Identities::OAuth)
+      @sign_up_with_invite = SignUpWithInvite.new(oauth_params).sign_up_with(Identities::OAuth)
 
       perform_sign_up @sign_up_with_invite
     end
@@ -52,9 +53,9 @@ module User
     def perform_sign_up sign_up
       if sign_up.perform
         session_manager.identity = sign_up.identity
-        redirect_to root_url, notice: :welcome
+        redirect_to root_url, notice: t('.success')
       else
-        render 'new'
+        render 'edit'
       end      
     end
 

@@ -18,7 +18,9 @@ module User
       # and one in params.
       oauth_data = request.env["omniauth.auth"]
 
-      oauth_params = {oauth_data: oauth_data, user_name: params[:user_name]}
+      # FIXME: the way the user_name is inferred might work for facebook only
+      oauth_params = {oauth_data: oauth_data,
+                      user_name: oauth_data[:info][:nickname]}
       # TODO: The host app should be able to do a sign_up here instead 
       @sign_up = SignUp.new(oauth_params).sign_in_with(Identities::OAuth)
 
@@ -35,7 +37,7 @@ module User
     def perform_sign_up sign_up
       if sign_up.perform
         session_manager.identity = sign_up.identity
-        redirect_to root_url, notice: :welcome
+        redirect_to root_url, notice: t('.success')
       else
         render 'new'
       end      

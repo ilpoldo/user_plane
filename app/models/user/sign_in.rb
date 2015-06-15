@@ -7,6 +7,7 @@ module User
     attribute :email
     attribute :password
     attribute :oauth_data
+    attribute :strategy
     attr_accessor :ominauth_error
 
     attribute :identity
@@ -19,13 +20,17 @@ module User
         unless identity.account.suspensions.empty?
           command.errors.add(:base, :suspended)
         end
+      elsif strategy = command.strategy
+        sign_in_error = :"unknown_#{strategy.model_name.singular}"
+        command.errors.add(:base, sign_in_error)
       else
-        command.errors.add(:base, :invalid)
+        raise "Please choose a strategy to perform the sign in"
       end
     end
 
-    def sign_in_with sign_in_strategy
-      @identity = sign_in_strategy.find_identity(self) if identity.nil?
+    def sign_in_with strategy
+      @strategy = strategy
+      @identity = strategy.find_identity(self) if identity.nil?
       self
     end
 

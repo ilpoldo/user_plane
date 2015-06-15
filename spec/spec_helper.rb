@@ -23,8 +23,12 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
   config.infer_spec_type_from_file_location!
+
+  config.before type: :controller do
+    routes { UserPlane::Engine.routes }
+  end
 end
 
 RSpec::Rails::RoutingExampleGroup.include Rails.application.routes.url_helpers
 RSpec::Rails::ControllerExampleGroup.include Rails.application.routes.url_helpers
-Rails.configuration.action_mailer.default_url_options = {host: 'example.com' }
+Rails.configuration.action_mailer.default_url_options = { host: 'example.com' }
