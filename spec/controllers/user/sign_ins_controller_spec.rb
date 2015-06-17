@@ -12,6 +12,9 @@ describe User::SignInsController, type: :controller do
   describe "signing in" do
     it "updates the session with the correct credentials" do 
       expect(session_manager).to receive(:identity=).with(a_user.email)
+      expect(session_manager).to receive(:remember_page).with(nil)
+      expect(session_manager).to receive(:previous_page)
+
       post :create, user_sign_in: {email: a_user.email.address, password: a_user.email.password}
     end
 

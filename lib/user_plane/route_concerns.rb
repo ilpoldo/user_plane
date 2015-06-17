@@ -3,6 +3,10 @@ module UserPlane
 
     DEFAULTS = {namespace: 'user', on: :collection}
 
+    mattr_accessor :signed_in_constraint do
+        -> (request) {SessionManager.new(request.session).signed_in?}
+    end
+
     class AbstractConcern
       attr_accessor :concern_options
       attr_accessor :mapper
@@ -71,20 +75,7 @@ module UserPlane
 
       attr_accessor :singed_in_constraint
 
-      def default_signed_in_constraint
-        -> (r) {SessionManager.new(r.session).signed_in?}
-      end
-
-      def initialize(defaults = nil)
-        @signed_in_constraint = Hash(defaults).delete(:signed_in_constraint) {|k| default_signed_in_constraint}
-        super defaults
-      end
-
       def build
-        mapper.concern :signed_in do
-          scope constraint: @singed_in_constraint
-        end
-
         mapper.resource :sign_in, options(only: [:new, :create, :destroy]) do
           if exists? :auth_endpoint
             mapper.concerns :auth_endpoint, controller: :sign_ins
@@ -93,8 +84,7 @@ module UserPlane
 
         mapper.resource :details, options(only: [:edit, :update],
                                           as: :update_details,
-                                          on: :member,
-                                          concern: :signed_in)
+                                          constraints: RouteConcerns.signed_in_constraint)
       end
     end
 
@@ -126,7 +116,7 @@ module UserPlane
         
         mapper.resources :invites, options(only: [:new, :create],
                                            as: :send_sign_up_invites,
-                                           concern: :signed_in)
+                                           constraints: RouteConcerns.signed_in_constraint)
       end
     end
 

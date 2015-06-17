@@ -13,15 +13,21 @@ Rails.application.routes.draw do
   #   concerns :email_identity      
   # end
 
-  concerns :sign_up
-  
   # Alternatively as a simple scope
   scope '/account' do
     concerns :base
     concerns :email_identity
   end
 
+  concerns :sign_up  
+
+  scope constraints: UserPlane::RouteConcerns.signed_in_constraint do
+    get 'signed_in_only', to: 'welcome#index'
+  end
+
   root 'welcome#index'
+
+  get 'signed_in_only', to: UserPlane::RedirectToSignIn.new
 
   # scope '/foo' do
   #   namespace 'user', path: '/' do

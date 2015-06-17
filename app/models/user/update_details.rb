@@ -2,6 +2,12 @@ module User
   class UpdateDetails < UserPlane::Command
     include ActiveModel::Validations::Callbacks
 
+    # Setting the plural route key won't work, polymorphic_url will still
+    # generate a path key with the singular name, so the inflector was updated
+    # in this case.
+
+    # model_name.instance_variable_set(:@singular_route_key, 'update_details')
+
     PasswordDetails = Struct.new(:current_password, :password, :password_confirmation) do
       def changed?
         (password || password_confirmation) ? true : false
@@ -33,6 +39,17 @@ module User
         email_identity.password = password_details.password
         email_identity.password_confirmation = password_details.password_confirmation
       end
+    end
+
+    # Ensures that polymorphic_url treats this as a singular resource
+    def persisted?
+      true
+    end
+
+
+    # # Ensures that polymorphic_url treats this as a singular resource
+    def to_param
+      nil
     end
 
     action do

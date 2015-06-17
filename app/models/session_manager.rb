@@ -43,8 +43,8 @@ class SessionManager
   # Sets into the session the identity with which the user has logged in.
   def identity=(identity)
     unless identity.nil?
-      @session[:identity] = {id_token: identity.serialize,
-                             expires_at: SessionManager.identity_lifetime.from_now}
+      @session[:identity] = {'id_token' => identity.serialize,
+                             'expires_at' => SessionManager.identity_lifetime.from_now}
     else
       @session[:identity] = nil
     end
@@ -59,8 +59,9 @@ class SessionManager
   # Retrieves the identity from using the identity id and creation time stored in the session
   def identity
     identity = @session[:identity]
-    if identity &&  identity[:expires_at] > Time.now 
-      @identity ||= User::Identity.deserialize!(identity[:id_token])
+
+    if identity &&  identity['expires_at'] > Time.now 
+      @identity ||= User::Identity.deserialize!(identity['id_token'])
     else
       nil
     end
@@ -78,7 +79,7 @@ class SessionManager
       
   # Sets the login expiration to one year from now.
   def remember_me!
-    @session[:identity][:expires_at] = 1.year.from_now
+    @session[:identity]['expires_at'] = 1.year.from_now
   end
   
 private
@@ -86,8 +87,8 @@ private
   # Renews session expiration for the next 45 minutes if the session is still fresh
   def refresh!
     identity = @session[:identity]
-    if signed_in? && identity[:expires_at] < SessionManager.identity_lifetime.from_now 
-      identity[:expires_at] = SessionManager.identity_lifetime.from_now
+    if signed_in? && identity['expires_at'] < SessionManager.identity_lifetime.from_now 
+      identity['expires_at'] = SessionManager.identity_lifetime.from_now
     end
   end
 

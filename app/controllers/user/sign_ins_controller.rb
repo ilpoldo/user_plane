@@ -39,8 +39,10 @@ module User
 
     def perform_sign_in sign_in
       if sign_in.perform
+        session_manager.remember_page nil
         session_manager.identity = sign_in.identity
-        redirect_to root_url, notice: t('.success')
+        redirect_to session_manager.previous_page || root_url,
+                    notice: t('.success')
       else
         render 'new'
       end

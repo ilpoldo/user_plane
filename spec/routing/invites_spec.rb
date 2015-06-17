@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'shared_contexts/user'
+require 'shared_contexts/routing'
 
 describe "routest for Invite" do
   include_context 'user'
+  include_context 'routing'
 
   context 'redeeming' do
     subject :sign_up_with_invite do
@@ -39,7 +41,8 @@ describe "routest for Invite" do
 
     it "routes sending sign up invites" do
       path = polymorphic_path([send_sign_up_invite], action: :new)
-      expect(get: path).to route_to("user/invites#new", concern: :signed_in)
+      passing_signed_in_constraint
+      expect(get: path).to route_to("user/invites#new")
     end    
   end
 

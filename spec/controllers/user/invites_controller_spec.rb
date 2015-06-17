@@ -7,14 +7,12 @@ describe User::InvitesController, type: :controller do
 
   # TODO: report this bug. You can't reproduce every route without use_route
   # because all params are stringified, but constraints can be symbols
-  BackToSymbol = Struct.new(:to_s)
 
   it 'does serve an invite page' do
     session_manager = SessionManager.new(session)
     session_manager.identity = a_user.email
 
-    concern = BackToSymbol.new(:signed_in)
-    get :new, concern: concern
+    get :new
     expect(response).to have_http_status(:ok)
   end
 
