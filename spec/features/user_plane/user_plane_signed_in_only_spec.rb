@@ -5,7 +5,7 @@ RSpec.feature "SignedInOnly", type: :feature do
   include_context 'user'
 
   scenario 'trying to access a signed-in-only' do
-    visit 'signed_in_only'
+    visit '/signed_in_only'
     expect(current_path).to eql(polymorphic_path([User::SignIn.new], action: :new))
         
     fill_in 'Email', with: a_user.email.address

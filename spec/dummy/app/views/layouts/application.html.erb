@@ -10,7 +10,20 @@
   <% flash.each do |key,msg| %>
     <%= content_tag :p, msg, class: key %>
   <% end %>
-
+  <ul>
+    <% if session_manager.signed_in? %>
+      <li>
+        <%= link_to "Profile", polymorphic_path(User::UpdateDetails.new, action: :edit) %>
+      </li>
+      <li>
+        <%= link_to "Sign Out", polymorphic_path(User::SignIn.new), method: :delete %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to "Sign In", polymorphic_path(User::SignIn.new, action: :new) %>
+      </li>
+    <% end %>
+  </ul>
   <%= yield %>
 
 </body>

@@ -10,7 +10,7 @@ module UserPlane # :nodoc:
         def copy_view_files
           create_root_folder
           
-          view_for_resource :edit, 'update_details', ['user_name:string',
+          view_for_resource :edit, 'update_details', ['name:string',
                                                       'email:string',
                                                       'current_password:password',
                                                       'password:password',

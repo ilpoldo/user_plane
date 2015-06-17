@@ -10,7 +10,8 @@ module User
 
     PasswordDetails = Struct.new(:current_password, :password, :password_confirmation) do
       def changed?
-        (password || password_confirmation) ? true : false
+        has_passwords = password || password_confirmation
+        has_passwords && (!password.empty? || !password_confirmation.empty?)
       end
     end
 
@@ -19,6 +20,8 @@ module User
     %w(password password_confirmation current_password).each do |attribute|
       delegate attribute.to_sym, "#{attribute}=".to_sym, to: :password_details
     end
+
+    delegate :name, to: :account
 
     validates :email_identity, receiver: {map_attributes: {address:  :email,
                                                            password: :password,

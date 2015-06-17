@@ -13,7 +13,7 @@ module User
       if @send_password_reset.perform
         reset_password = User::ResetPassword.new(verification: @send_password_reset.verification)
         reset_mail = UserPlane::VerificationMailer.password_reset(reset_password)
-        reset_mail.deliver
+        reset_mail.deliver_now
         redirect_to root_url, notice: t('.success')
       else
         render 'new'
