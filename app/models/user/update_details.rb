@@ -60,14 +60,16 @@ module User
     end
 
     def email
-      email_identity.address
+      email_identity && email_identity.address
     end
 
     def email= address
-      if email_identity.new_record?
-        email_identity.address = address
-      else
-        email_identity.unverified_address = address
+      unless address == email
+        if email_identity.new_record?
+          email_identity.address = address
+        else
+          email_identity.unverified_address = address
+        end
       end
     end
 
@@ -80,8 +82,6 @@ module User
       password_details.changed? && !email_identity.password_digest_changed? ? true : false
     end
 
-  private
-
     def email_identity
       @account.email || @account.build_email
     end
@@ -89,6 +89,8 @@ module User
     def password_details
       @password_details ||= PasswordDetails.new()
     end
+
+  private
 
     def current_password_is_valid?
       unless email_identity.new_record?

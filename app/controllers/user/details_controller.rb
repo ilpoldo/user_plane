@@ -29,6 +29,8 @@ module User
       end
     end
 
+    # TODO: add an action to add facebook authentication
+
   private
 
     def initialize_update_details
