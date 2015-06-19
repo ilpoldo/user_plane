@@ -30,4 +30,16 @@ RSpec.feature "UpdateDetails", type: :feature do
     # expect(current_path).to eql('/signed_in_only')
   end
 
+  scenario 'changing the user name' do
+    sign_in(a_user)
+    
+    new_email = Faker::Internet.safe_email
+
+    visit polymorphic_path([User::UpdateDetails.new], action: :edit)
+    fill_in 'Name', with: 'marvin'
+    click_button 'Update'
+
+    expect(page).to have_selector('input[value="marvin"]')
+  end
+
 end

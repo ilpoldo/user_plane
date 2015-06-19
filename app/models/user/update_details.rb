@@ -21,7 +21,7 @@ module User
       delegate attribute.to_sym, "#{attribute}=".to_sym, to: :password_details
     end
 
-    delegate :name, to: :account
+    delegate :name, :name=, to: :account
 
     validates :email_identity, receiver: {map_attributes: {address:  :email,
                                                            password: :password,
