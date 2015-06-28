@@ -21,9 +21,10 @@ module User
           confirm_email_address = User::ConfirmEmailAddress.new(verification: email_verification)
           confirm_mail = UserPlane::VerificationMailer.address_verification(confirm_email_address)
           confirm_mail.deliver_now
-          # TODO: flash a warning about the email address
+          flash[:warning] = t('.address_change_warning',
+                              address: email_verification.recipient)
         end
-        render 'edit', notice: :updated
+        render 'edit', notice: t('.success')
       else
         render 'edit'
       end

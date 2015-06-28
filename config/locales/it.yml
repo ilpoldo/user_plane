@@ -32,6 +32,10 @@ it:
       user_send_password_reset:
         <<: *user_send_password_reset_attributes
   user:
+    details:
+      update:
+        success: "Your details were succesfully updated."
+        address_change_warning: "Per completare il cambio di indirizzo email clicca il link di comferma che è stato appena inviato a %{address}."
     sign_ins:
       create:
         success: "Accesso effettuato."

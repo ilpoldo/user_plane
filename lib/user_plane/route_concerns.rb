@@ -11,8 +11,8 @@ module UserPlane
       attr_accessor :concern_options
       attr_accessor :mapper
 
-      def initialize(defaults = nil)
-        defaults ||= RouteConcerns::DEFAULTS
+      def initialize(options = {})
+        defaults = RouteConcerns::DEFAULTS.merge(options)
         @namespace = defaults[:namespace]
         @defaults = defaults.except(:namespace)
       end
@@ -101,6 +101,12 @@ module UserPlane
     # An alternative to the SignUp concern that provides routes to handle sign
     # up via invites.
     class Invites < AbstractNamespacedConcern
+
+      def initialize(defaults = {})
+        @users_can_send_invites = defaults.delete(:users_can_send_invites) || true
+        super
+      end
+
       def build
         sign_up_options = options(only: [:edit, :update],
                                   path_names: {edit: 'redeem'},
@@ -114,9 +120,11 @@ module UserPlane
           end
         end
         
-        mapper.resources :invites, options(only: [:new, :create],
-                                           as: :send_sign_up_invites,
-                                           constraints: RouteConcerns.signed_in_constraint)
+        if @users_can_send_invites
+          mapper.resources :invites, options(only: [:new, :create],
+                                             as: :send_sign_up_invites,
+                                             constraints: RouteConcerns.signed_in_constraint)
+        end
       end
     end
 
