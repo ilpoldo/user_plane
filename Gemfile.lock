@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    user_plane (0.0.13)
+    user_plane (0.0.14)
       bcrypt
       email_validator
       imperator
@@ -154,7 +154,7 @@ GEM
       rake
     jasmine-core (2.3.4)
     json (1.8.3)
-    jwt (1.5.0)
+    jwt (1.5.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     listen (2.10.0)
@@ -197,7 +197,7 @@ GEM
     omniauth-oauth (1.1.0)
       oauth
       omniauth (~> 1.0)
-    omniauth-oauth2 (1.3.0)
+    omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     omniauth-twitter (1.2.0)

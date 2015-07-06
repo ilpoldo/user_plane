@@ -1,6 +1,5 @@
 module UserPlane
   class RedirectToSignIn
-
     def initialize route_options={}
       default_route = {controller: 'user/sign_ins', action: :new}
       @sign_in_route = default_route.merge(route_options)
@@ -8,6 +7,11 @@ module UserPlane
 
     def call env
       session_manager = SessionManager.new(env['rack.session'])
+
+      if session_manager.signed_in?
+        raise ActionController::RoutingError.new('Not Found')
+      end
+
       request_path = "#{env['PATH_INFO']}?#{env['QUERY_STRING']}"
       session_manager.remember_page(request_path)
 

@@ -8,7 +8,7 @@ module UserPlane
     def invite invite
       @sign_up_with_invite = User::SignUpWithInvite.new(invite: invite)
 
-      mail to: invite.recipient
+      mail to: @sign_up_with_invite.invite.recipient
     end
   end
 end

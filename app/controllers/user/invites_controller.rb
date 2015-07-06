@@ -11,6 +11,9 @@ module User
       @send_sign_up_invite = SendSignUpInvite.new(params[:send_sign_up_invite])
 
       if @send_sign_up_invite.perform
+        invite_email = UserPlane::InviteMailer.invite(@send_sign_up_invite.invite)
+        invite_email.deliver_now
+        
         redirect_to :new, notice: :success
       else
         render 'new'

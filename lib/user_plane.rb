@@ -19,6 +19,7 @@ require 'support_segment/sti_helpers'
 module UserPlane
   mattr_accessor :parent_controller
   mattr_accessor :parent_mailer
+  mattr_accessor :redirect_to_sign_in
 
   def self.parent_controller
     @@parent_controller || '::ApplicationController'
@@ -30,5 +31,13 @@ module UserPlane
 
   def self.send_emails_from
     "accounts@#{Rails.configuration.action_mailer.default_url_options[:host]}"
+  end
+
+  def self.redirect_to_sign_in
+    @@redirect_to_sign_in ||= Rack::Builder.new do 
+      use ActionDispatch::ShowExceptions, Rails.application.config.exceptions_app
+      use ActionDispatch::DebugExceptions, Rails.application
+      run RedirectToSignIn.new
+    end
   end
 end

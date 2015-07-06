@@ -27,6 +27,9 @@ RSpec.configure do |config|
   config.before type: :controller do
     routes { UserPlane::Engine.routes }
   end
+
+  Rails.application.config.consider_all_requests_local = true
+  Rails.application.config.action_dispatch.show_exceptions = true
 end
 
 RSpec::Rails::RoutingExampleGroup.include Rails.application.routes.url_helpers

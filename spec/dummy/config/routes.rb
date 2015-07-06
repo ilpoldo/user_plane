@@ -27,7 +27,10 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  get 'signed_in_only', to: UserPlane::RedirectToSignIn.new
+  get 'signed_in_only', to: UserPlane.redirect_to_sign_in
+
+  # Catch-all
+  get '*path', to: UserPlane.redirect_to_sign_in
 
   # scope '/foo' do
   #   namespace 'user', path: '/' do
