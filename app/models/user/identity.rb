@@ -8,16 +8,18 @@ module User
     end
 
     def self.deserialize id_token
-      token = Identities::IdToken.find_by_key(id_token) or raise ActiveRecord::RecordNotFound
-      token.identity
+      token = Identities::IdToken.find_by_key(id_token)
+      token ? token.identity : nil
     end
 
     def self.deserialize! id_token
       identity = deserialize(id_token)
       if identity
         raise User::AccountSuspended unless identity.account.suspensions.empty?
+        identity
+      else
+        raise ActiveRecord::RecordNotFound
       end
-      identity
     end
 
   end

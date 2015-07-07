@@ -4,7 +4,7 @@ require 'shared_contexts/user'
 describe User::UpdateDetails do
   include_context 'user'
 
-  let     (:new_address) { Faker::Internet.safe_email }
+  let (:new_address) { Faker::Internet.safe_email }
 
   it 'errors if the new email is already taken' do
     conflicting_signup = Fabricate(:user_sign_up, email: new_address)

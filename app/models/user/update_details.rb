@@ -5,7 +5,6 @@ module User
     # Setting the plural route key won't work, polymorphic_url will still
     # generate a path key with the singular name, so the inflector was updated
     # in this case.
-
     # model_name.instance_variable_set(:@singular_route_key, 'update_details')
 
     PasswordDetails = Struct.new(:current_password, :password, :password_confirmation) do
@@ -50,7 +49,7 @@ module User
     end
 
 
-    # # Ensures that polymorphic_url treats this as a singular resource
+    # Ensures that polymorphic_url treats this as a singular resource
     def to_param
       nil
     end

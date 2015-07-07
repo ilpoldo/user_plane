@@ -58,10 +58,14 @@ class SessionManager
 
   # Retrieves the identity from using the identity id and creation time stored in the session
   def identity
-    identity = @session[:identity]
+    serialized_identity = @session[:identity]
 
-    if identity &&  identity['expires_at'] > Time.now 
-      @identity ||= User::Identity.deserialize!(identity['id_token'])
+    if serialized_identity &&  serialized_identity['expires_at'] > Time.now
+      begin
+        @identity ||= User::Identity.deserialize!(serialized_identity['id_token'])
+      rescue
+        nil
+      end
     else
       nil
     end

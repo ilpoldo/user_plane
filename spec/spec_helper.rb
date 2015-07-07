@@ -28,6 +28,7 @@ RSpec.configure do |config|
     routes { UserPlane::Engine.routes }
   end
 
+  # These two have been switched on to test redirects:
   Rails.application.config.consider_all_requests_local = true
   Rails.application.config.action_dispatch.show_exceptions = true
 end
