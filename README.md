@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/ilpoldo/user_plane/badges/gpa.svg)](https://codeclimate.com/github/ilpoldo/user_plane)
+
 UserPlane
 =========
 
