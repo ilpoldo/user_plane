@@ -8,15 +8,14 @@ Getting Started
 
 Add `gem 'user_plane'` to your Gemfile and run `bundle install`
 
-Migrations
-''''''''''
+### Migrations
+
 
 Create all the necessary user tables:
 
     rake db:migrate
 
-Routes
-''''''
+### Routes
 
 Mount the authentication routes in your main application:
 
@@ -48,8 +47,7 @@ To allow only invite holders to sign up swap it for the invite system use `Invit
 
     concern :sign_up,  UserPlane::RouteConcerns::Invites.new()
 
-Initialiser
-'''''''''''
+### Initialiser
 
 Activate omniauth providers in the initialiser file
 
@@ -60,8 +58,7 @@ Activate omniauth providers in the initialiser file
         provider_ignores_state: true
     end
 
-Generating the default views
-''''''''''''''''''''''''''''
+### Generating the default views
 
 The generator is a bit of a work in progress, try:
 
