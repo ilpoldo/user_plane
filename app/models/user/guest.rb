@@ -8,4 +8,11 @@ class User::Guest
     @session = session
   end
 
+  def name
+    'guest user'
+  end
+
+  def uid
+    ''
+  end
 end

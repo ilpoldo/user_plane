@@ -4,6 +4,7 @@ module User
   class SignInsController < ApplicationController
 
     def new
+      session_manager.sign_out
       @sign_in = SignIn.new()
     end
 

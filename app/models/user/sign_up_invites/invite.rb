@@ -2,6 +2,7 @@ module User::SignUpInvites
   class Invite < ActiveRecord::Base
     include TokenSegment
 
+
     belongs_to      :stack
     belongs_to      :sender, class_name: 'User::Account'
     belongs_to      :account, class_name: 'User::Account'
@@ -19,7 +20,7 @@ module User::SignUpInvites
 
     # Returns a Null invite
     def self.find_by_code code
-      super(code) || Null(code)      
+      find_by(code: code) || Null.new(code)      
     end
 
   end
@@ -28,12 +29,18 @@ module User::SignUpInvites
   # valid. It will 
   Null = Struct.new(:code) do
     include ActiveModel::Validations
+    include NullObjectPersistable
 
+    mimics_persistence_from Invite
     validate {|r| r.errors.add(:base, :invalid) }
 
-    def method_missing method_name
+    def method_missing method_name, *arguments
       return nil if [:stack, :sender, :recipient].include? method_name
       super 
+    end
+
+    def persisted?
+      true
     end
   end
 end

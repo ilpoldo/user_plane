@@ -6,7 +6,8 @@ module User
     attr_accessor :verification
 
     def email= address
-      @identity = User::Identities::Email.find_by(address: address)
+      @identity = User::Identities::Email.find_by_address(address)
+      @email = address
     end
 
     def persisited?

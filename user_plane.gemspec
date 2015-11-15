@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = UserPlane::VERSION
   s.authors     = ["Leandro Pedroni"]
   s.email       = ["ilpoldo@gmail.com"]
-  s.homepage    = "http://leandropedroni.com/segments"
+  s.homepage    = "https://github.com/ilpoldo/user_plane"
   s.summary     = "User component for Rails applications."
   s.description = "User component for Rails applications."
   s.license     = "MIT"

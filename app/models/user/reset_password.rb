@@ -32,10 +32,13 @@ module User
       password_reset_query = User::Identities::EmailVerification.password_reset.where(token: code)
       if @identity = User::Identities::Email.joins(:verifications).merge(password_reset_query).first
         @verification = identity.verifications.detect {|v| v.token == code}
+      else
+        raise ActiveRecord::RecordNotFound
       end
     end
 
     def verification= verification
+      return unless verification
       @code = verification.token
       @verification = verification
       @identity = verification.email

@@ -24,10 +24,10 @@ describe User::SendPasswordReset, type: :model do
 
   context 'with an unknown email address' do
     before do
-      allow(User::Identities::Email).to receive(:find_by).and_return(nil)
+      allow(User::Identities::Email).to receive(:find_by_address).and_return(nil)
     end
 
-    subject(:send_reset) {described_class.new(email: a_user.email.address)}
+    subject(:send_reset) {described_class.new(email: 'dont.find.me@example.com')}
 
     it {is_expected.to be_valid}
 

@@ -10,9 +10,6 @@ module User
 
     validates :identities, presence: true
 
-    # TODO: customise the user name requirements...
-    validates :name, uniqueness: true #, presence: true
-
     # TODO: turn this into a configuration option?
     # in the event scenario the invites are shared across a party.    
     has_one    :invites_stack, class_name: 'User::SignUpInvites::Stack',

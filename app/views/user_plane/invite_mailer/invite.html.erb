@@ -1,2 +1,2 @@
 Hello <%= @sign_up_with_invite.invite.recipient %>,
-  here's your <%= link_to 'sign up invite', polymorphic_url([@sign_up_with_invite], action: :edit) %>.
+  here's your <%= link_to 'sign up invite', main_app.polymorphic_url([@sign_up_with_invite], action: :edit) %>.

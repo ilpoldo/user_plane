@@ -119,18 +119,7 @@ describe User::ResetPassword do
       validated_reset_password('invalid token', new_password)
     end
 
-    it {is_expected.not_to be_valid}
-    it {expect(reset_password.errors.messages[:code].size).to eq(1)}
-
-    context 'and a bad password' do
-      subject :reset_password do
-        validated_reset_password('invalid token', '')
-      end
-
-      it {is_expected.not_to be_valid}
-      it {expect(reset_password.errors.messages[:code].size).to eq(1)}
-    end
-
+    it {expect {subject}.to raise_error ActiveRecord::RecordNotFound}
   end
 
   context 'with an expired verification token' do

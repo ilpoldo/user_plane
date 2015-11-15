@@ -10,12 +10,14 @@ module User
     def create
       @send_password_reset = SendPasswordReset.new(send_password_reset_params)
 
-      if @send_password_reset.perform
+      # silent failure on password reset?
+      if @send_password_reset.identity and @send_password_reset.perform
         reset_password = User::ResetPassword.new(verification: @send_password_reset.verification)
         reset_mail = UserPlane::VerificationMailer.password_reset(reset_password)
         reset_mail.deliver_now
-        redirect_to root_url, notice: t('.success')
+        redirect_to root_url, notice: t('.success', address: @send_password_reset.email)
       else
+        flash[:notice] = t('.failure', address: @send_password_reset.email)
         render 'new'
       end
     end

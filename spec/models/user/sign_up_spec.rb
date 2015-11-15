@@ -36,7 +36,6 @@ describe User::SignUp do
       
     it {is_expected.not_to be_valid}
     it {expect(new_sign_up.errors).to include(:email)}
-    it {expect(new_sign_up.errors).to include(:user_name)}
     it {expect(new_sign_up.errors).not_to include(:email_identity)}
   end
 

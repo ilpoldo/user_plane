@@ -25,8 +25,12 @@ module User
       verified_address = Identities::EmailVerification.address_verification.spent.where(current_address)
 
       def self.find_identity sign_in
-        identity = find_by_address(sign_in[:email])
+        identity = identity = find_by_address(sign_in[:email])
         identity.authenticate(sign_in[:password]) if identity
+      end
+
+      def self.find_by_address address
+        where("lower(address) =?", address.downcase).first
       end
 
       def self.build_identity sign_up
