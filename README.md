@@ -1,5 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ilpoldo/user_plane.svg?style=svg)](https://circleci.com/gh/ilpoldo/user_plane)
 [![Code Climate](https://codeclimate.com/github/ilpoldo/user_plane/badges/gpa.svg)](https://codeclimate.com/github/ilpoldo/user_plane)
-
 UserPlane
 =========
 
