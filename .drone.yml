@@ -1,0 +1,15 @@
+build:
+  image: ruby:2.3.1
+  environment:
+    - DATABASE_URL=postgres://127.0.0.1:5432
+    - RAILS_ENV=test
+    - SECRET_KEY_BASE=f0466478c5dbb595428efc1ec5c69cc3f2b26d71293aa5e14db93b3140561fb28af269a9e1dcc7fc26a7a623e77c00460780aec1ec6347b90b8f26878fbbf8fb
+  commands:
+    - bundle install
+    - bundle exec rake db:reset db:migrate
+    - bundle exec rspec
+compose:
+  db:
+    image: postgres
+    ports:
+      - "5432"

@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "user_accounts", force: true do |t|
+  create_table "user_accounts", force: :cascade do |t|
     t.string   "name"
     t.string   "uid"
     t.datetime "created_at"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
 
   add_index "user_accounts", ["uid"], name: "index_user_accounts_on_uid", using: :btree
 
-  create_table "user_identities_email_verifications", force: true do |t|
+  create_table "user_identities_email_verifications", force: :cascade do |t|
     t.string   "token"
     t.string   "type"
     t.string   "recipient"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   add_index "user_identities_email_verifications", ["email_id"], name: "index_user_identities_email_verifications_on_email_id", using: :btree
   add_index "user_identities_email_verifications", ["token"], name: "index_user_identities_email_verifications_on_token", using: :btree
 
-  create_table "user_identities_emails", force: true do |t|
+  create_table "user_identities_emails", force: :cascade do |t|
     t.integer  "account_id"
     t.string   "address"
     t.string   "password_digest"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   add_index "user_identities_emails", ["address"], name: "index_user_identities_emails_on_address", using: :btree
   add_index "user_identities_emails", ["password_digest"], name: "index_user_identities_emails_on_password_digest", using: :btree
 
-  create_table "user_identities_id_tokens", force: true do |t|
+  create_table "user_identities_id_tokens", force: :cascade do |t|
     t.string   "key"
     t.integer  "identity_id"
     t.string   "identity_type"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
   add_index "user_identities_id_tokens", ["identity_id"], name: "index_user_identities_id_tokens_on_identity_id", using: :btree
   add_index "user_identities_id_tokens", ["key"], name: "index_user_identities_id_tokens_on_key", using: :btree
 
-  create_table "user_identities_o_auths", force: true do |t|
+  create_table "user_identities_o_auths", force: :cascade do |t|
     t.integer  "account_id"
     t.string   "provider"
     t.string   "uid"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
     t.datetime "updated_at"
   end
 
-  create_table "user_sign_up_invites_invites", force: true do |t|
+  create_table "user_sign_up_invites_invites", force: :cascade do |t|
     t.integer  "stack_id"
     t.integer  "sender_id"
     t.string   "code"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
     t.datetime "updated_at"
   end
 
-  create_table "user_sign_up_invites_stacks", force: true do |t|
+  create_table "user_sign_up_invites_stacks", force: :cascade do |t|
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "remaining_invites"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20141026230208) do
     t.datetime "updated_at"
   end
 
-  create_table "user_suspensions", force: true do |t|
+  create_table "user_suspensions", force: :cascade do |t|
     t.string   "message"
     t.integer  "issuer_id"
     t.integer  "account_id"

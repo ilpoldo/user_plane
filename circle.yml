@@ -1,0 +1,15 @@
+machine:
+  services:
+    - docker
+test:
+  pre:
+    - docker run -d -p 5432 --name db postgres
+    - docker build -t system_under_test .
+  override:
+    - |
+      docker run -it \
+      --link db \
+      -e DATABASE_URL=postgres://db:5432
+      -e RAILS_ENV=test \
+      -e SECRET_KEY_BASE=f0466478c5dbb595428efc1ec5c69cc3f2b26d71293aa5e14db93b3140561fb28af269a9e1dcc7fc26a7a623e77c00460780aec1ec6347b90b8f26878fbbf8fb \
+      system_under_test bash -c "bundle exec rake db:reset; bundle exec rspec"
